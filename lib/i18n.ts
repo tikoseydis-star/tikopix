@@ -76,7 +76,7 @@ const fr = {
   },
   photo: {
     eyebrow: "Galerie",
-    intro: "La lumière, le geste, l'instant. Clique sur une image pour l'agrandir.",
+    intro: "La lumière, le geste, l'instant.",
     filter: "Filtrer les photos",
     empty: "Aucune photo dans cette catégorie pour l'instant.",
     enlarge: "Agrandir",
@@ -87,7 +87,7 @@ const fr = {
   },
   video: {
     eyebrow: "Mouvement",
-    intro: "Tournage, montage et colorimétrie. Survole pour un aperçu, clique pour regarder.",
+    intro: "Tournage, montage et colorimétrie.",
     play: "Lire la vidéo",
     soon: "Les vidéos arrivent bientôt.",
     close: "Fermer la vidéo",
@@ -192,7 +192,7 @@ const en: Dict = {
   },
   photo: {
     eyebrow: "Gallery",
-    intro: "Light, gesture, the moment. Click any image to enlarge it.",
+    intro: "Light, gesture, the moment.",
     filter: "Filter photos",
     empty: "No photos in this category yet.",
     enlarge: "Enlarge",
@@ -203,7 +203,7 @@ const en: Dict = {
   },
   video: {
     eyebrow: "Motion",
-    intro: "Filming, editing and color grading. Hover for a preview, click to watch.",
+    intro: "Filming, editing and color grading.",
     play: "Play video",
     soon: "Videos coming soon.",
     close: "Close video",
