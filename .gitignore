@@ -45,3 +45,5 @@ next-env.d.ts
 
 # Netlify local build output
 .netlify
+deno.lock
+*.log
