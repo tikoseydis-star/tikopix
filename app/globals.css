@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0a0a0d;
+  --bg-2: #101015;
+  --surface: #14141b;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --fg: #f4f4f6;
+  --muted: #9b9ba8;
+  --violet: #8b6cff;
+  --violet-soft: #b9a6ff;
+  --silver: #c8cbd4;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-violet: var(--violet);
+  --color-violet-soft: var(--violet-soft);
+  --color-silver: var(--silver);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-archivo);
+  --font-script: var(--font-marker);
+  --font-sign: var(--font-sign);
+  --ease-out: var(--ease-out);
+}
+
+html {
+  background: var(--bg);
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--violet);
+  color: #fff;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1440px] px-4 sm:px-8 lg:px-14;
+  }
+  .eyebrow {
+    @apply text-[11px] font-medium uppercase tracking-[0.32em] text-muted;
+  }
+  .h-display {
+    @apply font-display font-semibold uppercase leading-[0.95] tracking-[-0.01em];
+    font-stretch: 112%;
+  }
+  .script {
+    @apply font-script text-violet;
+    transform: skewX(-8deg);
+    display: inline-block;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-3 rounded-full border border-violet/70 px-6 py-3 text-sm font-medium text-fg transition-colors duration-300 hover:bg-violet hover:border-violet focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet;
+  }
+}
+
+/* Film grain overlay */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+  opacity: 0.07;
+  animation: grain 1.2s steps(6) infinite;
+  mix-blend-mode: overlay;
+}
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -4%); }
+  60% { transform: translate(-4%, -1%); }
+  80% { transform: translate(3%, 3%); }
+  100% { transform: translate(0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain::after { animation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Hide native cursor only on fine pointers when the custom cursor is live */
+@media (pointer: fine) {
+  html.has-cursor, html.has-cursor a, html.has-cursor button { cursor: none; }
+}
+
+html.intro-seen .intro-overlay { display: none; }
