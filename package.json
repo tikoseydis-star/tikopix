@@ -6,7 +6,8 @@
     "dev": "next dev -p 3010",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed:studio": "node scripts/seed-sanity.mts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

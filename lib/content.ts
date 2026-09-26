@@ -167,7 +167,8 @@ async function categoriesFor(lang: Locale): Promise<Category[]> {
     title: tr(c, "title", lang) ?? c.slug,
     icon: c.icon ?? "camera",
     description: tr(c, "description", lang),
-    cover: img(c.cover, c.title) ?? seedCategories[0].cover,
+    // No cover uploaded yet → keep that category's demo cover rather than an unrelated one
+    cover: img(c.cover, c.title) ?? (seedCategories.find((d) => d.slug === c.slug) ?? seedCategories[0]).cover,
   }));
 }
 
