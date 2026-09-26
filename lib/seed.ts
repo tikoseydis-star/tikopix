@@ -189,6 +189,13 @@ export const seedProjects: Project[] = [
   },
 ];
 
+/** Tiko's own portraits for the 3D velvet stage (public/stage) */
+const STAGE: Img[] = [
+  { src: "/stage/portrait-pink.jpg", alt: "Portrait en studio, robe rose en velours", width: 1120, height: 1400 },
+  { src: "/stage/portrait-velvet.jpg", alt: "Portrait en studio, veston de velours violet", width: 525, height: 350 },
+  { src: "/stage/portrait-orange.jpg", alt: "Portrait en studio sur fond orange", width: 736, height: 1104 },
+];
+
 export const seedSettings: Settings = {
   name: "TikoPix",
   heroEyebrow: "TikoPix",
@@ -206,6 +213,7 @@ export const seedSettings: Settings = {
   specialtiesText:
     "Que ce soit pour le sport, le lifestyle, l'immobilier ou des événements, je capture l'essence de chaque projet avec une approche créative et professionnelle.",
   lensTitle: "Chaque image commence par une intention.",
+  stageImages: STAGE,
   lensText:
     "Avant de déclencher, je regarde. La lumière, le geste, le moment exact où tout s'aligne. C'est là que l'histoire se raconte.",
   aboutTitle: "Derrière l'objectif",

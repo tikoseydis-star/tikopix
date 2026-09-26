@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Reveal } from "@/components/motion/Reveal";
 import { AboutSection } from "@/components/sections/AboutSection";
 import { CtaSection } from "@/components/sections/CtaSection";
-import { LensSection } from "@/components/sections/LensSection";
+import { StageSection } from "@/components/sections/StageSection";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { getSettings } from "@/lib/content";
 import { getDict, localizedMeta, pageLang } from "@/lib/page-lang";
@@ -39,7 +39,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
           ))}
         </ol>
       </section>
-      <LensSection title={s.lensTitle} text={s.lensText} />
+      <StageSection title={s.lensTitle} text={s.lensText} images={s.stageImages} />
       <CtaSection s={s} />
     </>
   );

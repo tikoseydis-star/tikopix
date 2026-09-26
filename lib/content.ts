@@ -83,6 +83,7 @@ type RawSettings = Record<string, unknown> & {
   heroImage?: RawImg;
   portrait?: RawImg;
   ctaImage?: RawImg;
+  stageImages?: RawImg[];
   heroLoop?: string;
   showreel?: RawVideo;
   skills?: RawSkill[];
@@ -97,7 +98,7 @@ function seedSettingsFor(lang: Locale): Settings {
 export async function getSettings(lang: Locale): Promise<Settings> {
   const base = seedSettingsFor(lang);
   const raw = await query<RawSettings>(groq`*[_id == "settings"][0]{
-    ..., "heroImage": heroImage${IMG}, "portrait": portrait${IMG}, "ctaImage": ctaImage${IMG},
+    ..., "heroImage": heroImage${IMG}, "portrait": portrait${IMG}, "ctaImage": ctaImage${IMG}, "stageImages": stageImages[]${IMG},
     "heroLoop": heroLoop.asset->url,
     "showreel": showreel{ "file": videoFile.asset->url, "url": videoUrl }
   }`);
@@ -113,6 +114,10 @@ export async function getSettings(lang: Locale): Promise<Settings> {
     showreel: video(raw.showreel, heroImage) ?? base.showreel,
     portrait: img(raw.portrait, "Portrait", base.portrait)!,
     ctaImage: img(raw.ctaImage, "", base.ctaImage)!,
+    stageImages: (() => {
+      const list = (raw.stageImages ?? []).map((g, i) => img(g, `Portrait ${i + 1}`)).filter((g): g is Img => !!g);
+      return list.length ? list : base.stageImages;
+    })(),
     skills: raw.skills?.length
       ? raw.skills.map((s) => ({ icon: s.icon, label: tr(s, "label", lang) ?? "", value: tr(s, "value", lang) ?? "" }))
       : base.skills,

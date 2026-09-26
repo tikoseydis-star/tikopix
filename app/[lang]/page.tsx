@@ -3,7 +3,7 @@ import { AboutSection } from "@/components/sections/AboutSection";
 import { CtaSection } from "@/components/sections/CtaSection";
 import { FeaturedProjects } from "@/components/sections/FeaturedProjects";
 import { Hero } from "@/components/sections/Hero";
-import { LensSection } from "@/components/sections/LensSection";
+import { StageSection } from "@/components/sections/StageSection";
 import { Marquee } from "@/components/sections/Marquee";
 import { ReelZoom } from "@/components/sections/ReelZoom";
 import { Specialties } from "@/components/sections/Specialties";
@@ -28,7 +28,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       <FeaturedProjects projects={featured} t={t} />
       {s.showreel && <ReelZoom reel={s.showreel} year={String(new Date().getFullYear())} />}
       <Marquee items={categories.map((c) => c.title)} />
-      <LensSection title={s.lensTitle} text={s.lensText} />
+      <StageSection title={s.lensTitle} text={s.lensText} images={s.stageImages} />
       <AboutSection s={s} />
       <CtaSection s={s} />
     </>

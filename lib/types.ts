@@ -62,6 +62,8 @@ export type Settings = {
   specialtiesTitle: string;
   specialtiesText: string;
   lensTitle: string;
+  /** Portraits shown on the 3D velvet stage */
+  stageImages: Img[];
   lensText: string;
   aboutTitle: string;
   aboutBio: string;

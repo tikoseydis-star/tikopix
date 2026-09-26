@@ -41,7 +41,7 @@ const fr = {
     allProjects: "Voir tous les projets",
   },
   reel: { play: "Lire le showreel", hint: "Clique pour lancer le son" },
-  lens: { eyebrow: "L'objectif", aperture: "Ouverture", shutter: "Vitesse" },
+  lens: { eyebrow: "En studio", aperture: "Ouverture", shutter: "Vitesse" },
   about: {
     eyebrow: "À propos",
     signature: "Signature",
@@ -155,7 +155,7 @@ const en: Dict = {
     allProjects: "See all projects",
   },
   reel: { play: "Play the showreel", hint: "Click to turn the sound on" },
-  lens: { eyebrow: "The lens", aperture: "Aperture", shutter: "Shutter" },
+  lens: { eyebrow: "In the studio", aperture: "Aperture", shutter: "Shutter" },
   about: {
     eyebrow: "About",
     signature: "Signature",

@@ -33,7 +33,17 @@ export const settings = defineType({
     }),
     ...withEn(defineField({ name: "specialtiesTitle", title: "Titre des spécialités", type: "string", group: "hero" })),
     ...withEn(defineField({ name: "specialtiesText", title: "Texte des spécialités", type: "text", rows: 3, group: "hero" })),
-    ...withEn(defineField({ name: "lensTitle", title: "Titre section 3D (objectif)", type: "string", group: "hero" })),
+    ...withEn(defineField({ name: "lensTitle", title: "Titre section 3D (studio velours)", type: "string", group: "hero" })),
+    defineField({
+      name: "stageImages",
+      title: "Portraits de la scène 3D (velours)",
+      type: "array",
+      group: "hero",
+      description: "2 à 5 portraits accrochés devant le rideau de velours. Glisse-les dans l'ordre voulu.",
+      of: [defineArrayMember({ type: "image", options: { hotspot: true }, fields: [defineField({ name: "alt", title: "Description courte", type: "string" })] })],
+      options: { layout: "grid" },
+      validation: (r) => r.max(5),
+    }),
     ...withEn(defineField({ name: "lensText", title: "Texte section 3D", type: "text", rows: 3, group: "hero" })),
 
     ...withEn(defineField({ name: "aboutTitle", title: "Titre", type: "string", group: "about", initialValue: "Derrière l'objectif" })),
