@@ -47,3 +47,6 @@ next-env.d.ts
 .netlify
 deno.lock
 *.log
+
+# Private copies with passwords: never committed
+docs/prive/
