@@ -60,7 +60,7 @@ const fr = {
   },
   work: {
     eyebrow: "Projets",
-    intro: "Une sélection de projets. Peu de mots, beaucoup d'images.",
+    intro: "Une sélection de projets. Un talent, une passion, votre image.",
     all: "Tout",
     filter: "Filtrer par catégorie",
     empty: "Aucun projet dans cette catégorie pour l'instant.",
@@ -176,7 +176,7 @@ const en: Dict = {
   },
   work: {
     eyebrow: "Projects",
-    intro: "A selection of projects. Few words, lots of images.",
+    intro: "A selection of projects. One talent, one passion, your image.",
     all: "All",
     filter: "Filter by category",
     empty: "No projects in this category yet.",
