@@ -38,3 +38,22 @@ export function videoFields() {
     }),
   ];
 }
+
+type AnyField = ReturnType<typeof defineField>;
+
+/**
+ * French field + optional English twin (`<name>En`).
+ * The site shows the English value on /en when filled, otherwise the French one.
+ */
+export function withEn(field: AnyField): AnyField[] {
+  const f = field as AnyField & { name: string; title?: string };
+  const en = {
+    ...f,
+    name: `${f.name}En`,
+    title: `${f.title ?? f.name} (English)`,
+    description: "Optionnel. Si vide, le texte français est affiché sur la version anglaise.",
+    validation: undefined,
+    initialValue: undefined,
+  } as AnyField;
+  return [field, en];
+}

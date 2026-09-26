@@ -3,7 +3,7 @@
 import { Play } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link, useDict } from "@/components/i18n";
 import { useRef } from "react";
 import { useVideoModal } from "@/components/media/VideoModal";
 import type { Project } from "@/lib/types";
@@ -12,6 +12,7 @@ import type { Project } from "@/lib/types";
 function VideoRow({ p, index }: { p: Project; index: number }) {
   const { open } = useVideoModal();
   const vid = useRef<HTMLVideoElement>(null);
+  const t = useDict();
   const video = p.video!;
 
   return (
@@ -29,7 +30,7 @@ function VideoRow({ p, index }: { p: Project; index: number }) {
           <h2 className="h-display mt-3 text-[clamp(1.8rem,4vw,3.4rem)]">{p.title}</h2>
           <p className="mt-3 text-sm text-muted">{p.summary}</p>
           <Link href={`/work/${p.slug}`} className="mt-5 inline-block text-xs text-violet-soft hover:text-fg">
-            Voir le projet →
+            {t.photo.seeProject}
           </Link>
         </div>
         <button
@@ -37,8 +38,8 @@ function VideoRow({ p, index }: { p: Project; index: number }) {
           onClick={() => open(video, p.title)}
           onMouseEnter={() => vid.current?.play().catch(() => {})}
           onMouseLeave={() => { if (vid.current) { vid.current.pause(); vid.current.currentTime = 0; } }}
-          data-cursor="Play"
-          aria-label={`Lire la vidéo ${p.title}`}
+          data-cursor={t.cursor.play}
+          aria-label={`${t.video.play} ${p.title}`}
           className="group relative aspect-video overflow-hidden rounded-sm bg-surface"
         >
           <Image src={p.cover.src} alt={p.cover.alt} fill sizes="(min-width:768px) 55vw, 100vw" className="object-cover transition-transform duration-[1.4s] group-hover:scale-105" style={{ objectPosition: p.cover.position }} />
@@ -57,7 +58,8 @@ function VideoRow({ p, index }: { p: Project; index: number }) {
 }
 
 export function VideoList({ projects }: { projects: Project[] }) {
-  if (!projects.length) return <p className="container-x py-24 text-center text-muted">Les vidéos arrivent bientôt.</p>;
+  const t = useDict();
+  if (!projects.length) return <p className="container-x py-24 text-center text-muted">{t.video.soon}</p>;
   return (
     <ul className="container-x pb-28">
       {projects.map((p, i) => (

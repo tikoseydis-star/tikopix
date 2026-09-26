@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { PlayButton } from "@/components/media/PlayButton";
 import { MaskLines } from "@/components/motion/Reveal";
 import { useLenis } from "@/components/motion/SmoothScroll";
+import { useDict } from "@/components/i18n";
 import type { Settings } from "@/lib/types";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -21,6 +22,7 @@ export function Hero({ s }: { s: Settings }) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const lenis = useLenis();
+  const t = useDict();
   const [videoReady, setVideoReady] = useState(false);
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -45,7 +47,7 @@ export function Hero({ s }: { s: Settings }) {
   const [line1, line2] = titleLines(s.heroTitle);
 
   return (
-    <section ref={ref} className="relative h-[100svh] min-h-[620px] overflow-hidden grain" aria-label="Introduction">
+    <section ref={ref} className="relative h-[100svh] min-h-[620px] overflow-hidden grain" aria-label={t.a11y.intro}>
       <motion.div className="absolute inset-[-3%]" style={{ x: px, y: py }}>
       <motion.div className="absolute inset-0" style={{ scale: reduce ? 1.05 : bgScale, y: reduce ? 0 : bgY }}>
         <Image
@@ -117,7 +119,7 @@ export function Hero({ s }: { s: Settings }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2, duration: 1 }}
         >
-          {s.showreel ? <PlayButton video={s.showreel} label="Voir le showreel" title="Showreel" /> : <span />}
+          {s.showreel ? <PlayButton video={s.showreel} label={t.hero.showreel} title="Showreel" /> : <span />}
           <button
             type="button"
             onClick={() => {
@@ -128,7 +130,7 @@ export function Hero({ s }: { s: Settings }) {
             }}
             className="hidden items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-fg/70 transition-colors hover:text-fg sm:flex"
           >
-            Scroll
+            {t.hero.scroll}
             <motion.span animate={reduce ? undefined : { y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
               <ArrowDown className="h-4 w-4" strokeWidth={1.4} />
             </motion.span>

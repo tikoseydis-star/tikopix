@@ -1,5 +1,5 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
-import { imageField, videoFields } from "./fields";
+import { imageField, videoFields, withEn } from "./fields";
 
 export const project = defineType({
   name: "project",
@@ -11,7 +11,7 @@ export const project = defineType({
     { name: "details", title: "Détails" },
   ],
   fields: [
-    defineField({ name: "title", title: "Titre", type: "string", group: "main", validation: (r) => r.required() }),
+    ...withEn(defineField({ name: "title", title: "Titre", type: "string", group: "main", validation: (r) => r.required() })),
     defineField({
       name: "slug",
       title: "Adresse (URL)",
@@ -28,7 +28,7 @@ export const project = defineType({
       group: "main",
       validation: (r) => r.required(),
     }),
-    defineField({
+    ...withEn(defineField({
       name: "summary",
       title: "Quelques mots",
       type: "text",
@@ -36,14 +36,14 @@ export const project = defineType({
       group: "main",
       description: "Une ou deux phrases maximum. Laisse les images parler.",
       validation: (r) => r.max(200),
-    }),
-    defineField({
+    })),
+    ...withEn(defineField({
       name: "services",
       title: "Services",
       type: "string",
       group: "main",
       description: "Ex. : Photographie / Vidéo",
-    }),
+    })),
     defineField({
       name: "featured",
       title: "Mettre en vedette sur l'accueil",
@@ -68,7 +68,7 @@ export const project = defineType({
       options: { layout: "grid" },
     }),
     ...videoFields().map((f) => ({ ...f, group: "media" })),
-    defineField({ name: "eyebrow", title: "Petit titre (optionnel)", type: "string", group: "details", description: "Remplace le nom de la catégorie au-dessus du titre. Ex. : Vidéo cinématique" }),
+    ...withEn(defineField({ name: "eyebrow", title: "Petit titre (optionnel)", type: "string", group: "details", description: "Remplace le nom de la catégorie au-dessus du titre. Ex. : Vidéo cinématique" })),
     defineField({ name: "client", title: "Client", type: "string", group: "details" }),
     defineField({ name: "location", title: "Lieu", type: "string", group: "details" }),
     defineField({ name: "year", title: "Année", type: "string", group: "details" }),

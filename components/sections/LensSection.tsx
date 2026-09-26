@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
 import { MaskLines, Reveal } from "@/components/motion/Reveal";
 import { splitTitle } from "@/components/ui/SectionHead";
+import { useDict } from "@/components/i18n";
 
 const LensScene = dynamic(() => import("@/components/three/LensScene"), {
   ssr: false,
@@ -21,6 +22,7 @@ const SHUTTER = ["1/30", "1/60", "1/125", "1/250", "1/500", "1/1000", "1/2000", 
 /** Pinned scroll scene: the 3D lens turns toward you and its iris opens, with a live exposure readout. */
 export function LensSection({ title, text }: { title: string; text: string }) {
   const ref = useRef<HTMLElement>(null);
+  const t = useDict();
   const inView = useInView(ref, { margin: "20% 0px" });
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const [stop, setStop] = useState(0);
@@ -31,7 +33,7 @@ export function LensSection({ title, text }: { title: string; text: string }) {
   const glow = useTransform(scrollYProgress, [0, 0.7], [0.15, 0.55]);
 
   return (
-    <section ref={ref} className="relative h-[280vh]" aria-label="L'objectif">
+    <section ref={ref} className="relative h-[280vh]" aria-label={t.lens.eyebrow}>
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         <motion.div
           aria-hidden
@@ -45,7 +47,7 @@ export function LensSection({ title, text }: { title: string; text: string }) {
         <div className="container-x pointer-events-none relative flex h-full flex-col justify-end pb-14 lg:justify-center lg:pb-0">
           <div className="max-w-md rounded-lg bg-bg/40 p-1 backdrop-blur-[2px] lg:bg-transparent lg:backdrop-blur-none">
             <Reveal y={10}>
-              <p className="eyebrow mb-4">L&apos;objectif</p>
+              <p className="eyebrow mb-4">{t.lens.eyebrow}</p>
             </Reveal>
             <MaskLines lines={splitTitle(title)} className="h-display text-[clamp(1.9rem,3.6vw,3rem)]" />
             <Reveal delay={0.15}>
@@ -54,11 +56,11 @@ export function LensSection({ title, text }: { title: string; text: string }) {
 
             <div className="mt-10 grid grid-cols-3 gap-6 border-t border-line pt-6 font-display tabular-nums">
               <div>
-                <p className="eyebrow !text-[9px]">Ouverture</p>
+                <p className="eyebrow !text-[9px]">{t.lens.aperture}</p>
                 <p className="mt-2 text-2xl text-fg">f/{STOPS[stop]}</p>
               </div>
               <div>
-                <p className="eyebrow !text-[9px]">Vitesse</p>
+                <p className="eyebrow !text-[9px]">{t.lens.shutter}</p>
                 <p className="mt-2 text-2xl text-fg">{SHUTTER[stop]}</p>
               </div>
               <div>

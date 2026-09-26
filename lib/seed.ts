@@ -230,3 +230,53 @@ export const seedSettings: Settings = {
   handle: "@tiko.pix",
   city: "Montréal, Québec",
 };
+
+/* ------------------------------------------------------------------ */
+/* English overlay for the demo content (the French above is the base) */
+
+type En = { title?: string; description?: string; summary?: string; services?: string; eyebrow?: string; location?: string; client?: string };
+
+export const seedEn: {
+  categories: Record<string, En>;
+  projects: Record<string, En>;
+  settings: Partial<Settings>;
+} = {
+  categories: {
+    sport: { title: "Sport", description: "The intensity of the game, at the right moment." },
+    lifestyle: { title: "Lifestyle", description: "People, places, a mood." },
+    immobilier: { title: "Real Estate", description: "Spaces you want to live in." },
+    evenements: { title: "Events", description: "The energy of a moment, forever." },
+  },
+  projects: {
+    "match-day": { services: "Photography / Video", summary: "A night under the lights. The tension, the sweat, the goal.", client: "Local club" },
+    "montreal-vibes": { services: "Video / Photography", summary: "The city at night, its lights and the people who make it alive." },
+    "projet-residentiel": { title: "Residential Project", services: "HDR Photography", summary: "Natural light, clean lines. A house that breathes.", client: "Real estate broker" },
+    "night-drive": { eyebrow: "Cinematic video", services: "Editing / Color grading", summary: "A night ride, graded for the feeling." },
+    "courts-la-nuit": { title: "Courts at Night", services: "Photography", summary: "Basketball as a show." },
+    "tour-de-l-ile": { title: "Tour de l'Île", services: "Photography / Video", summary: "Speed, effort and a tight peloton." },
+    "villa-horizon": { services: "Photography / Drone", summary: "White architecture, turquoise water." },
+    "live-sessions": { services: "Photography / Video", summary: "The sound, the crowd, the moment." },
+    "sommet-corporatif": { title: "Corporate Summit", services: "Event coverage", summary: "A day of conferences told in pictures.", client: "Private company" },
+    portraits: { services: "Photography", summary: "Faces, and the truth in them." },
+  },
+  settings: {
+    heroText:
+      "Photographer and videographer based in Montréal. I create visual content that tells authentic stories, with close attention to detail, light and emotion.",
+    specialtiesTitle: "Different worlds, one vision.",
+    specialtiesText:
+      "Sport, lifestyle, real estate or events: I capture the essence of every project with a creative, professional approach.",
+    lensTitle: "Every image starts with intention.",
+    lensText: "Before I press the shutter, I look. The light, the gesture, the exact moment everything lines up. That's where the story is told.",
+    aboutTitle: "Behind the lens",
+    aboutBio:
+      "My name is Djonko Seydi, a photographer and videographer based in Montréal. Passionate about images for years, I've developed a unique eye that I bring to a wide range of projects: sport, lifestyle, real estate and more.",
+    aboutMission: "My goal is simple: to create visuals that mean something, stir emotions and leave a lasting impression.",
+    skills: [
+      { icon: "camera", label: "Photography", value: "4+ years of experience" },
+      { icon: "video", label: "Video", value: "1 year on DaVinci Resolve" },
+      { icon: "palette", label: "Color", value: "White balance · Exposure" },
+      { icon: "tools", label: "Software", value: "Lightroom · DaVinci Resolve (learning Premiere Pro)" },
+      { icon: "pin", label: "Based in", value: "Montréal, Québec" },
+    ],
+  },
+};

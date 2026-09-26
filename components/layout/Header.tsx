@@ -1,18 +1,21 @@
 "use client";
 
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
-import Link from "next/link";
+import { Link, useDict } from "@/components/i18n";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Magnetic } from "@/components/motion/Magnetic";
 import { InstagramIcon, YoutubeIcon } from "@/components/ui/Icons";
 import { Logo } from "@/components/ui/Logo";
+import { LangSwitch, stripLocale } from "./LangSwitch";
 import { isActive, NAV } from "./nav";
 
 type Props = { name: string; instagram?: string; youtube?: string; email: string };
 
 export function Header({ name, instagram, youtube, email }: Props) {
-  const pathname = usePathname();
+  const fullPath = usePathname();
+  const pathname = stripLocale(fullPath);
+  const t = useDict();
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
   const [solid, setSolid] = useState(false);
@@ -25,9 +28,9 @@ export function Header({ name, instagram, youtube, email }: Props) {
   });
 
   // Close the mobile menu when the route changes
-  const [lastPath, setLastPath] = useState(pathname);
-  if (pathname !== lastPath) {
-    setLastPath(pathname);
+  const [lastPath, setLastPath] = useState(fullPath);
+  if (fullPath !== lastPath) {
+    setLastPath(fullPath);
     setOpen(false);
   }
   useEffect(() => {
@@ -52,7 +55,7 @@ export function Header({ name, instagram, youtube, email }: Props) {
           <div className="container-x flex h-[72px] items-center justify-between gap-6">
             <Logo name={name} />
 
-            <nav aria-label="Navigation principale" className="hidden lg:block">
+            <nav aria-label={t.a11y.mainNav} className="hidden lg:block">
               <ul className="flex items-center gap-10">
                 {NAV.map((item) => {
                   const active = isActive(pathname, item.href);
@@ -77,7 +80,8 @@ export function Header({ name, instagram, youtube, email }: Props) {
             </nav>
 
             <div className="flex items-center gap-5">
-              <div className="hidden items-center gap-4 sm:flex">
+              <LangSwitch />
+              <div className="hidden items-center gap-4 xl:flex">
                 {instagram && (
                   <a href={instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="text-fg/80 transition-colors hover:text-violet-soft">
                     <InstagramIcon />
@@ -91,7 +95,7 @@ export function Header({ name, instagram, youtube, email }: Props) {
               </div>
               <Magnetic className="hidden md:inline-block">
                 <Link href="/contact" className="btn-ghost !px-5 !py-2.5 !text-[13px]">
-                  Let&apos;s work together
+                  {t.cta.workTogether}
                 </Link>
               </Magnetic>
               <button
@@ -99,7 +103,7 @@ export function Header({ name, instagram, youtube, email }: Props) {
                 onClick={() => setOpen((o) => !o)}
                 aria-expanded={open}
                 aria-controls="mobile-menu"
-                aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+                aria-label={open ? t.a11y.closeMenu : t.a11y.openMenu}
                 className="relative flex h-11 w-11 items-center justify-center rounded-full border border-line-strong lg:hidden"
               >
                 <span className={`absolute h-px w-5 bg-fg transition-transform duration-500 ${open ? "rotate-45" : "-translate-y-[4px]"}`} />
@@ -116,14 +120,14 @@ export function Header({ name, instagram, youtube, email }: Props) {
             id="mobile-menu"
             role="dialog"
             aria-modal="true"
-            aria-label="Menu"
+            aria-label={t.a11y.menu}
             className="fixed inset-0 z-40 flex flex-col justify-between bg-bg px-6 pb-10 pt-28 lg:hidden"
             initial={{ clipPath: "circle(0% at calc(100% - 44px) 36px)" }}
             animate={{ clipPath: "circle(150% at calc(100% - 44px) 36px)" }}
             exit={{ clipPath: "circle(0% at calc(100% - 44px) 36px)" }}
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
           >
-            <nav aria-label="Navigation mobile">
+            <nav aria-label={t.a11y.mobileNav}>
               <ul className="space-y-1">
                 {NAV.map((item, i) => (
                   <li key={item.href} className="overflow-hidden">
@@ -140,7 +144,7 @@ export function Header({ name, instagram, youtube, email }: Props) {
               </ul>
             </nav>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }} className="space-y-5">
-              <Link href="/contact" className="btn-ghost">Let&apos;s work together</Link>
+              <Link href="/contact" className="btn-ghost">{t.cta.workTogether}</Link>
               <div className="flex items-center gap-5 text-sm text-muted">
                 <a href={`mailto:${email}`} className="hover:text-fg">{email}</a>
                 {instagram && <a href={instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:text-fg"><InstagramIcon /></a>}

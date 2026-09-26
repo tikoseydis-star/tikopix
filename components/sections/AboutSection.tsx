@@ -3,7 +3,7 @@
 import { ArrowRight } from "lucide-react";
 import { motion, useScroll, useTransform } from "motion/react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link, useDict } from "@/components/i18n";
 import { useRef } from "react";
 import { MaskLines, Reveal } from "@/components/motion/Reveal";
 import { SkillGlyph } from "@/components/ui/Icons";
@@ -23,6 +23,7 @@ function emphasize(text: string, words: string[]) {
 
 export function AboutSection({ s, full = false }: { s: Settings; full?: boolean }) {
   const ref = useRef<HTMLElement>(null);
+  const t = useDict();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const imgY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
@@ -48,7 +49,7 @@ export function AboutSection({ s, full = false }: { s: Settings; full?: boolean 
             whileInView={{ clipPath: "inset(0 -10% 0 0)" }}
             viewport={{ once: true }}
             transition={{ duration: 2.2, ease: [0.65, 0, 0.35, 1], delay: 0.3 }}
-            aria-label={`Signature : ${s.signature}`}
+            aria-label={`${t.about.signature} : ${s.signature}`}
           >
             {s.signature}
           </motion.p>
@@ -57,17 +58,17 @@ export function AboutSection({ s, full = false }: { s: Settings; full?: boolean 
         {/* Story */}
         <div className="px-4 py-14 sm:px-10 lg:px-12 lg:py-20">
           <Reveal y={10}>
-            <p className="eyebrow mb-3 !text-[10px]">À propos</p>
+            <p className="eyebrow mb-3 !text-[10px]">{t.about.eyebrow}</p>
           </Reveal>
           <MaskLines lines={[s.aboutTitle]} className="h-display text-[clamp(1.6rem,2.6vw,2.2rem)]" />
           <Reveal delay={0.1}>
-            <p className="mt-7 text-sm leading-[1.8] text-muted">{emphasize(s.aboutBio, ["sport", "lifestyle", "immobilier"])}</p>
-            <p className="mt-6 text-sm leading-[1.8] text-fg/90">{emphasize(s.aboutMission, ["visuels", "émotions"])}</p>
+            <p className="mt-7 text-sm leading-[1.8] text-muted">{emphasize(s.aboutBio, t.about.emphasizeBio)}</p>
+            <p className="mt-6 text-sm leading-[1.8] text-fg/90">{emphasize(s.aboutMission, t.about.emphasizeMission)}</p>
           </Reveal>
           {!full && (
             <Reveal delay={0.2} className="mt-10">
               <Link href="/about" className="btn-ghost !py-2.5 !text-xs">
-                En savoir plus <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
+                {t.cta.learnMore} <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
               </Link>
             </Reveal>
           )}

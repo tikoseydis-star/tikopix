@@ -1,12 +1,12 @@
 import { defineField, defineType } from "sanity";
-import { imageField } from "./fields";
+import { imageField, withEn } from "./fields";
 
 export const category = defineType({
   name: "category",
   title: "Catégorie",
   type: "document",
   fields: [
-    defineField({ name: "title", title: "Nom", type: "string", validation: (r) => r.required() }),
+    ...withEn(defineField({ name: "title", title: "Nom", type: "string", validation: (r) => r.required() })),
     defineField({
       name: "slug",
       title: "Adresse (URL)",
@@ -32,7 +32,7 @@ export const category = defineType({
       initialValue: "camera",
     }),
     imageField("cover", "Image de couverture", { required: true }),
-    defineField({ name: "description", title: "Phrase courte", type: "string" }),
+    ...withEn(defineField({ name: "description", title: "Phrase courte", type: "string" })),
     defineField({ name: "order", title: "Ordre d'affichage", type: "number", initialValue: 10 }),
   ],
   orderings: [{ title: "Ordre", name: "order", by: [{ field: "order", direction: "asc" }] }],

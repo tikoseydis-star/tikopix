@@ -3,7 +3,7 @@
 import { ArrowRight } from "lucide-react";
 import { motion, useScroll, useTransform } from "motion/react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link, useDict } from "@/components/i18n";
 import { useRef } from "react";
 import { Magnetic } from "@/components/motion/Magnetic";
 import type { Settings } from "@/lib/types";
@@ -11,6 +11,7 @@ import type { Settings } from "@/lib/types";
 /** Two-line brush-script call to action over a parallax landscape. */
 export function CtaSection({ s }: { s: Settings }) {
   const ref = useRef<HTMLElement>(null);
+  const t = useDict();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
 
@@ -19,7 +20,7 @@ export function CtaSection({ s }: { s: Settings }) {
   const lines = [words.slice(0, mid).join(" "), words.slice(mid).join(" ")];
 
   return (
-    <section ref={ref} className="relative overflow-hidden" aria-label="Contact">
+    <section ref={ref} className="relative overflow-hidden" aria-label={t.cta.contactMe}>
       <motion.div className="absolute inset-[-25%_0]" style={{ y }}>
         <Image src={s.ctaImage.src} alt="" fill sizes="100vw" className="object-cover opacity-60" style={{ objectPosition: s.ctaImage.position }} />
       </motion.div>
@@ -46,7 +47,7 @@ export function CtaSection({ s }: { s: Settings }) {
         </motion.h2>
         <Magnetic>
           <Link href="/contact" className="btn-ghost">
-            Contactez-moi <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
+            {t.cta.contactMe} <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
           </Link>
         </Magnetic>
       </div>

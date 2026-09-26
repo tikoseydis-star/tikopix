@@ -4,6 +4,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import Image from "next/image";
 import { useRef } from "react";
 import { useVideoModal } from "@/components/media/VideoModal";
+import { useDict } from "@/components/i18n";
 import type { Video } from "@/lib/types";
 
 /**
@@ -14,6 +15,7 @@ export function ReelZoom({ reel, year }: { reel: Video; year: string }) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const { open } = useVideoModal();
+  const t = useDict();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
   const clip = useTransform(scrollYProgress, [0, 0.7], ["inset(30% 30% 30% 30% round 14px)", "inset(0% 0% 0% 0% round 0px)"]);
@@ -31,8 +33,8 @@ export function ReelZoom({ reel, year }: { reel: Video; year: string }) {
         <motion.button
           type="button"
           onClick={() => open(reel, "Showreel")}
-          data-cursor="Play"
-          aria-label="Lire le showreel"
+          data-cursor={t.cursor.play}
+          aria-label={t.reel.play}
           className="absolute inset-0 block"
           style={{ clipPath: reduce ? "inset(0)" : clip }}
         >
@@ -56,7 +58,7 @@ export function ReelZoom({ reel, year }: { reel: Video; year: string }) {
 
         <motion.div className="pointer-events-none absolute inset-x-0 bottom-12 z-10 text-center" style={{ opacity: ctaOpacity }}>
           <p className="eyebrow !text-fg/90">Showreel {year}</p>
-          <p className="mt-3 font-script text-3xl text-violet-soft sm:text-4xl">Clique pour lancer le son</p>
+          <p className="mt-3 font-script text-3xl text-violet-soft sm:text-4xl">{t.reel.hint}</p>
         </motion.div>
       </div>
     </section>

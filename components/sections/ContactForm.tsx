@@ -3,6 +3,7 @@
 import { ArrowRight, Check, LoaderCircle } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
+import { useDict } from "@/components/i18n";
 import { contactSchema } from "@/lib/contact-schema";
 
 type Status = "idle" | "sending" | "sent" | "error";
@@ -14,6 +15,7 @@ const label =
   "pointer-events-none absolute left-0 top-6 origin-left text-sm text-muted transition-all duration-300 peer-focus:top-0 peer-focus:text-[11px] peer-focus:text-violet-soft peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-[11px]";
 
 export function ContactForm({ email, types }: { email: string; types: string[] }) {
+  const t = useDict().contact.form;
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Errors>({});
   const [serverMsg, setServerMsg] = useState("");
@@ -28,7 +30,7 @@ export function ContactForm({ email, types }: { email: string; types: string[] }
       const errs: Errors = {};
       for (const issue of parsed.error.issues) {
         const k = issue.path[0] as keyof Errors;
-        if (!errs[k]) errs[k] = issue.message;
+        if (!errs[k]) errs[k] = k === "name" ? t.errName : k === "email" ? t.errEmail : t.errMessage;
       }
       setErrors(errs);
       return;
@@ -44,12 +46,12 @@ export function ContactForm({ email, types }: { email: string; types: string[] }
       const j = (await res.json().catch(() => ({}))) as { error?: string };
       setServerMsg(
         j.error === "not_configured" || j.error === "send_failed"
-          ? `L'envoi automatique n'est pas disponible pour le moment. Écris-moi directement à ${email}.`
-          : (j.error ?? "Une erreur est survenue."),
+          ? `${t.unavailable} ${email}.`
+          : t.generic,
       );
       setStatus("error");
     } catch {
-      setServerMsg(`Connexion impossible. Écris-moi directement à ${email}.`);
+      setServerMsg(`${t.offline} ${email}.`);
       setStatus("error");
     }
   }
@@ -60,10 +62,10 @@ export function ContactForm({ email, types }: { email: string; types: string[] }
         <span className="flex h-16 w-16 items-center justify-center rounded-full bg-violet">
           <Check className="h-7 w-7" />
         </span>
-        <h2 className="h-display text-3xl">Message reçu.</h2>
-        <p className="text-muted">Merci ! Je te réponds en général sous 24 à 48 h.</p>
+        <h2 className="h-display text-3xl">{t.sentTitle}</h2>
+        <p className="text-muted">{t.sentText}</p>
         <button type="button" onClick={() => setStatus("idle")} className="text-sm text-violet-soft hover:text-fg">
-          Envoyer un autre message
+          {t.again}
         </button>
       </motion.div>
     );
@@ -74,20 +76,20 @@ export function ContactForm({ email, types }: { email: string; types: string[] }
       <div className="grid gap-8 sm:grid-cols-2">
         <div className="relative">
           <input id="name" name="name" autoComplete="name" placeholder="Nom" className={field} aria-invalid={!!errors.name} aria-describedby={errors.name ? "name-err" : undefined} />
-          <label htmlFor="name" className={label}>Ton nom</label>
+          <label htmlFor="name" className={label}>{t.name}</label>
           {errors.name && <p id="name-err" className="mt-2 text-xs text-red-400">{errors.name}</p>}
         </div>
         <div className="relative">
           <input id="email" name="email" type="email" autoComplete="email" placeholder="Courriel" className={field} aria-invalid={!!errors.email} aria-describedby={errors.email ? "email-err" : undefined} />
-          <label htmlFor="email" className={label}>Ton courriel</label>
+          <label htmlFor="email" className={label}>{t.emailField}</label>
           {errors.email && <p id="email-err" className="mt-2 text-xs text-red-400">{errors.email}</p>}
         </div>
       </div>
 
       <fieldset>
-        <legend className="mb-4 text-sm text-muted">Type de projet</legend>
+        <legend className="mb-4 text-sm text-muted">{t.type}</legend>
         <div className="flex flex-wrap gap-2">
-          {[...types, "Autre"].map((t) => (
+          {[...types, t.other].map((t) => (
             <button
               key={t}
               type="button"
@@ -103,12 +105,12 @@ export function ContactForm({ email, types }: { email: string; types: string[] }
 
       <div className="relative">
         <input id="date" name="date" placeholder="Date" className={field} />
-        <label htmlFor="date" className={label}>Date souhaitée (optionnel)</label>
+        <label htmlFor="date" className={label}>{t.date}</label>
       </div>
 
       <div className="relative">
         <textarea id="message" name="message" rows={5} placeholder="Message" className={`${field} resize-none`} aria-invalid={!!errors.message} aria-describedby={errors.message ? "msg-err" : undefined} />
-        <label htmlFor="message" className={label}>Parle-moi de ton projet</label>
+        <label htmlFor="message" className={label}>{t.message}</label>
         {errors.message && <p id="msg-err" className="mt-2 text-xs text-red-400">{errors.message}</p>}
       </div>
 
@@ -126,11 +128,11 @@ export function ContactForm({ email, types }: { email: string; types: string[] }
       <button type="submit" disabled={status === "sending"} className="btn-ghost disabled:cursor-wait disabled:opacity-60">
         {status === "sending" ? (
           <>
-            Envoi… <LoaderCircle className="h-4 w-4 animate-spin" />
+            {t.sending} <LoaderCircle className="h-4 w-4 animate-spin" />
           </>
         ) : (
           <>
-            Envoyer <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
+            {t.send} <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
           </>
         )}
       </button>

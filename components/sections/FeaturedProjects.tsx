@@ -1,18 +1,19 @@
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/components/i18n";
 import { SectionHead } from "@/components/ui/SectionHead";
+import type { Dict } from "@/lib/i18n";
 import type { Project } from "@/lib/types";
 import { ProjectCard } from "./ProjectCard";
 
-export function FeaturedProjects({ projects }: { projects: Project[] }) {
+export function FeaturedProjects({ projects, t }: { projects: Project[]; t: Dict }) {
   return (
-    <section className="container-x pb-24 md:pb-32" aria-label="Projets en vedette">
+    <section className="container-x pb-24 md:pb-32" aria-label={t.home.featured}>
       <SectionHead
-        eyebrow="Projets en vedette"
-        title="Un aperçu de mon travail"
+        eyebrow={t.home.featured}
+        title={t.home.featuredTitle}
         aside={
           <Link href="/work" className="group inline-flex items-center gap-3 text-xs text-fg/85 hover:text-fg">
-            Voir tous les projets
+            {t.home.allProjects}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={1.5} />
           </Link>
         }

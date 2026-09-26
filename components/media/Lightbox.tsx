@@ -3,7 +3,7 @@
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link, useDict } from "@/components/i18n";
 import { useCallback, useEffect, useRef } from "react";
 import type { Img, Project } from "@/lib/types";
 
@@ -11,6 +11,7 @@ type Item = { image: Img; project: Project };
 
 export function Lightbox({ items, index, onChange }: { items: Item[]; index: number | null; onChange: (i: number | null) => void }) {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const t = useDict();
   const item = index !== null ? items[index] : null;
   const go = useCallback((d: number) => index !== null && onChange((index + d + items.length) % items.length), [index, items.length, onChange]);
 
@@ -46,7 +47,7 @@ export function Lightbox({ items, index, onChange }: { items: Item[]; index: num
             <p className="text-xs text-muted tabular-nums">
               {index! + 1} / {items.length}
             </p>
-            <button ref={closeRef} type="button" onClick={() => onChange(null)} aria-label="Fermer" className="flex h-11 w-11 items-center justify-center rounded-full border border-line-strong hover:bg-violet">
+            <button ref={closeRef} type="button" onClick={() => onChange(null)} aria-label={t.photo.close} className="flex h-11 w-11 items-center justify-center rounded-full border border-line-strong hover:bg-violet">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -73,10 +74,10 @@ export function Lightbox({ items, index, onChange }: { items: Item[]; index: num
                 </div>
               </motion.div>
             </AnimatePresence>
-            <button type="button" onClick={() => go(-1)} aria-label="Photo précédente" className="absolute left-3 top-1/2 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-line-strong hover:bg-violet sm:flex">
+            <button type="button" onClick={() => go(-1)} aria-label={t.photo.prev} className="absolute left-3 top-1/2 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-line-strong hover:bg-violet sm:flex">
               <ChevronLeft className="h-5 w-5" />
             </button>
-            <button type="button" onClick={() => go(1)} aria-label="Photo suivante" className="absolute right-3 top-1/2 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-line-strong hover:bg-violet sm:flex">
+            <button type="button" onClick={() => go(1)} aria-label={t.photo.next} className="absolute right-3 top-1/2 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-line-strong hover:bg-violet sm:flex">
               <ChevronRight className="h-5 w-5" />
             </button>
           </div>
@@ -86,7 +87,7 @@ export function Lightbox({ items, index, onChange }: { items: Item[]; index: num
               <span className="text-fg">{item.project.title}</span> · {item.project.category.title}
             </p>
             <Link href={`/work/${item.project.slug}`} onClick={() => onChange(null)} className="text-violet-soft hover:text-fg">
-              Voir le projet →
+              {t.photo.seeProject}
             </Link>
           </div>
         </motion.div>

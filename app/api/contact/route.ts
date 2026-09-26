@@ -13,12 +13,12 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: "Requête invalide." }, { status: 400 });
+    return NextResponse.json({ error: "bad_request" }, { status: 400 });
   }
 
   const parsed = contactSchema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Champs invalides." }, { status: 422 });
+    return NextResponse.json({ error: "invalid", field: parsed.error.issues[0]?.message }, { status: 422 });
   }
   const d = parsed.data;
   if (d.company) return NextResponse.json({ ok: true }); // bot, pretend success

@@ -3,26 +3,28 @@
 import { AnimatePresence, motion } from "motion/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FilterChips } from "@/components/ui/FilterChips";
+import { useDict } from "@/components/i18n";
 import type { Category, Project } from "@/lib/types";
 import { ProjectCard } from "./ProjectCard";
 
 export function WorkGrid({ projects, categories }: { projects: Project[]; categories: Category[] }) {
   const params = useSearchParams();
   const router = useRouter();
+  const t = useDict();
   const pathname = usePathname();
   const active = params.get("cat") ?? "all";
 
   const visible = active === "all" ? projects : projects.filter((p) => p.category.slug === active);
   const options = [
-    { value: "all", label: "Tout", count: projects.length },
+    { value: "all", label: t.work.all, count: projects.length },
     ...categories.map((c) => ({ value: c.slug, label: c.title, count: projects.filter((p) => p.category.slug === c.slug).length })),
   ];
 
   return (
-    <section className="container-x pb-28" aria-label="Projets">
+    <section className="container-x pb-28" aria-label={t.work.eyebrow}>
       <div className="mb-12">
         <FilterChips
-          label="Filtrer par catégorie"
+          label={t.work.filter}
           options={options}
           value={active}
           onChange={(v) => router.replace(v === "all" ? pathname : `${pathname}?cat=${v}`, { scroll: false })}
@@ -30,7 +32,7 @@ export function WorkGrid({ projects, categories }: { projects: Project[]; catego
       </div>
 
       {visible.length === 0 ? (
-        <p className="py-24 text-center text-muted">Aucun projet dans cette catégorie pour l&apos;instant.</p>
+        <p className="py-24 text-center text-muted">{t.work.empty}</p>
       ) : (
         <motion.div layout className="grid gap-x-6 gap-y-14 md:grid-cols-2">
           <AnimatePresence mode="popLayout">

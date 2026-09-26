@@ -1,16 +1,17 @@
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/components/i18n";
 import { Reveal } from "@/components/motion/Reveal";
 import { CategoryGlyph } from "@/components/ui/Icons";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { TiltCard } from "@/components/ui/TiltCard";
+import type { Dict } from "@/lib/i18n";
 import type { Category } from "@/lib/types";
 
-export function Specialties({ title, text, categories }: { title: string; text: string; categories: Category[] }) {
+export function Specialties({ title, text, categories, t }: { title: string; text: string; categories: Category[]; t: Dict }) {
   return (
     <section className="container-x py-24 md:py-32" aria-labelledby="specialites">
-      <SectionHead eyebrow="Mes spécialités" title={title} aside={<p id="specialites" className="text-sm leading-relaxed text-muted">{text}</p>} />
+      <SectionHead eyebrow={t.home.specialties} title={title} aside={<p id="specialites" className="text-sm leading-relaxed text-muted">{text}</p>} />
       <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
         {categories.map((c, i) => (
           <li key={c.slug}>
@@ -18,7 +19,7 @@ export function Specialties({ title, text, categories }: { title: string; text: 
               <TiltCard className="aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/3.2]">
                 <Link
                   href={`/work?cat=${c.slug}`}
-                  data-cursor="Voir"
+                  data-cursor={t.cursor.view}
                   className="group relative block h-full overflow-hidden rounded-md border border-line bg-surface"
                 >
                   <Image

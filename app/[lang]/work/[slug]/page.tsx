@@ -1,28 +1,30 @@
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/components/i18n";
 import { notFound } from "next/navigation";
 import { PlayButton } from "@/components/media/PlayButton";
 import { ClipReveal, MaskLines, Reveal } from "@/components/motion/Reveal";
 import { getProject, getProjects } from "@/lib/content";
+import { locales } from "@/lib/i18n";
+import { getDict, localizedMeta, pageLang } from "@/lib/page-lang";
 import type { Img } from "@/lib/types";
 
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const projects = await getProjects();
-  return projects.map((p) => ({ slug: p.slug }));
+  const perLang = await Promise.all(locales.map(async (lang) => (await getProjects(lang)).map((p) => ({ lang, slug: p.slug }))));
+  return perLang.flat();
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/[lang]/work/[slug]">): Promise<Metadata> {
+  const lang = await pageLang(params);
   const { slug } = await params;
-  const data = await getProject(slug);
+  const data = await getProject(lang, slug);
   if (!data) return {};
   const { project } = data;
   return {
-    title: project.title,
-    description: project.summary,
+    ...localizedMeta(lang, `/work/${slug}`, project.title, project.summary),
     openGraph: { images: [{ url: project.cover.src, width: project.cover.width, height: project.cover.height }] },
   };
 }
@@ -38,18 +40,20 @@ function rows(images: Img[]) {
   return out;
 }
 
-export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ProjectPage({ params }: PageProps<"/[lang]/work/[slug]">) {
+  const lang = await pageLang(params);
+  const t = getDict(lang);
   const { slug } = await params;
-  const data = await getProject(slug);
+  const data = await getProject(lang, slug);
   if (!data) notFound();
   const { project: p, next } = data;
 
   const meta = [
-    ["Catégorie", p.eyebrow || p.category.title],
-    ["Services", p.services],
-    ["Client", p.client],
-    ["Lieu", p.location],
-    ["Année", p.year],
+    [t.work.category, p.eyebrow || p.category.title],
+    [t.work.services, p.services],
+    [t.work.client, p.client],
+    [t.work.location, p.location],
+    [t.work.year, p.year],
   ].filter((m): m is [string, string] => !!m[1]);
 
   return (
@@ -76,7 +80,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <MaskLines as="h1" lines={[p.title]} animateOnMount delay={0.15} className="h-display mt-4 text-[clamp(2.8rem,9vw,8rem)]" />
           {p.video && (
             <Reveal delay={0.4} className="mt-8">
-              <PlayButton video={p.video} label="Voir la vidéo" title={p.title} />
+              <PlayButton video={p.video} label={t.work.watch} title={p.title} />
             </Reveal>
           )}
         </div>
@@ -101,7 +105,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       </section>
 
       {p.gallery.length > 0 && (
-        <section className="container-x space-y-4 pb-24 sm:space-y-6" aria-label="Galerie">
+        <section className="container-x space-y-4 pb-24 sm:space-y-6" aria-label={t.work.gallery}>
           {rows(p.gallery).map((row, r) => (
             <div key={r} className={`grid gap-4 sm:gap-6 ${row.length === 2 ? "sm:grid-cols-2" : ""}`}>
               {row.map((img, i) => (
@@ -123,11 +127,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </section>
       )}
 
-      <Link href={`/work/${next.slug}`} className="group relative block h-[60svh] overflow-hidden border-t border-line" data-cursor="Suivant">
+      <Link href={`/work/${next.slug}`} className="group relative block h-[60svh] overflow-hidden border-t border-line" data-cursor={t.cursor.next}>
         <Image src={next.cover.src} alt="" fill sizes="100vw" className="object-cover opacity-40 transition-all duration-[1.4s] group-hover:scale-105 group-hover:opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-t from-bg to-transparent" />
         <div className="container-x relative flex h-full flex-col justify-center">
-          <p className="eyebrow">Projet suivant</p>
+          <p className="eyebrow">{t.work.next}</p>
           <p className="h-display mt-4 flex items-center gap-6 text-[clamp(2.4rem,7vw,6rem)]">
             {next.title}
             <ArrowRight className="h-[0.6em] w-[0.6em] transition-transform duration-700 group-hover:translate-x-4" strokeWidth={1} />
