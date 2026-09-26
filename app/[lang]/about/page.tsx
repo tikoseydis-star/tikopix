@@ -11,7 +11,7 @@ export const revalidate = 60;
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/about">): Promise<Metadata> {
   const lang = await pageLang(params);
-  return localizedMeta(lang, "/about", "About", getDict(lang).meta.about);
+  return localizedMeta(lang, "/about", getDict(lang).pages.about, getDict(lang).meta.about);
 }
 
 export default async function AboutPage({ params }: PageProps<"/[lang]/about">) {
@@ -20,7 +20,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
   const s = await getSettings(lang);
   return (
     <>
-      <PageHeader eyebrow={t.about.eyebrow} title="About" intro={s.heroText} />
+      <PageHeader eyebrow={t.about.eyebrow} title={t.pages.about} intro={s.heroText} />
       <AboutSection s={s} full />
       <section className="container-x py-24 md:py-32" aria-labelledby="process">
         <Reveal>

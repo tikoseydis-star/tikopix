@@ -15,7 +15,7 @@ export function Footer({ settings, lang }: { settings: Settings; lang: Locale })
           <ul className="flex flex-wrap gap-x-8 gap-y-2 text-xs text-muted">
             {NAV.map((n) => (
               <li key={n.href}>
-                <Link href={n.href} className="transition-colors hover:text-fg">{n.label}</Link>
+                <Link href={n.href} className="transition-colors hover:text-fg">{t.nav[n.key]}</Link>
               </li>
             ))}
           </ul>

@@ -9,7 +9,7 @@ export const revalidate = 60;
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/video">): Promise<Metadata> {
   const lang = await pageLang(params);
-  return localizedMeta(lang, "/video", "Video", getDict(lang).meta.video);
+  return localizedMeta(lang, "/video", getDict(lang).pages.video, getDict(lang).meta.video);
 }
 
 export default async function VideoPage({ params }: PageProps<"/[lang]/video">) {
@@ -19,7 +19,7 @@ export default async function VideoPage({ params }: PageProps<"/[lang]/video">) 
   const withVideo = projects.filter((p) => p.video);
   return (
     <>
-      <PageHeader eyebrow={t.video.eyebrow} title="Video" intro={t.video.intro} />
+      <PageHeader eyebrow={t.video.eyebrow} title={t.pages.video} intro={t.video.intro} />
       {s.showreel && <ReelZoom reel={s.showreel} year={String(new Date().getFullYear())} />}
       <VideoList projects={withVideo} />
     </>

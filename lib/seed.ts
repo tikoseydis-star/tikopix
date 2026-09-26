@@ -7,52 +7,53 @@
  */
 import type { Category, Img, Project, Settings } from "./types";
 
-function u(id: string, alt: string, ratio = 3 / 2): Img {
+function u(id: string, alt: string, ratio = 3 / 2, altEn?: string): Img {
   const width = 2400;
   const height = Math.round(width / ratio);
   return {
     src: `https://images.unsplash.com/photo-${id}?w=${width}&h=${height}&fit=crop&auto=format&q=80`,
     alt,
+    altEn,
     width,
     height,
   };
 }
 
 const IMG = {
-  cityDusk: u("1519501025264-65ba15a82390", "Rue de centre-ville au crépuscule"),
-  soccerFoot: u("1574629810360-7efbbe195018", "Joueur de soccer frappant le ballon", 4 / 5),
-  nightField: u("1431324155629-1a6deb1dec8d", "Terrain de soccer éclairé la nuit"),
-  whiteHouse: u("1600596542815-ffad4c1539a9", "Maison moderne blanche avec piscine"),
-  houseEvening: u("1600585154340-be6161a56a0c", "Maison contemporaine illuminée en soirée"),
-  interior: u("1600607687939-ce8a6c25118c", "Salon lumineux à aire ouverte"),
-  conference: u("1540575467063-178a50c2df87", "Public d'une conférence"),
-  concertFire: u("1470229722913-7c0e2dbbafd3", "Scène de concert en contre-jour", 4 / 5),
-  crowd: u("1501386761578-eac5c94b800a", "Foule en délire pendant un concert"),
-  photographer: u("1492691527719-9d1e07e534b4", "Photographe au sommet d'une montagne", 4 / 5),
-  fieldMan: u("1503023345310-bd7c1de61c7d", "Homme de dos dans un champ doré", 4 / 5),
-  smile: u("1492562080023-ab3db95bfbce", "Portrait lifestyle en extérieur", 4 / 5),
-  porsche: u("1503376780353-7e6692767b70", "Voiture sport de nuit sur l'autoroute"),
-  garage: u("1492144534655-ae79c964c9d7", "Voiture blanche dans un stationnement sombre"),
-  milkyWay: u("1519681393784-d120267933ba", "Montagnes sous la voie lactée", 16 / 9),
-  cyclists: u("1517649763962-0c623066013b", "Peloton de cyclistes"),
-  hoop: u("1546519638-68e109498ffc", "Ballon de basketball tombant dans le panier"),
-  arena: u("1504450758481-7338eba7524a", "Aréna de basketball pleine"),
-  purpleConcert: u("1506157786151-b8491531f063", "Concert sous lumières violettes"),
-  banquet: u("1511578314322-379afb476865", "Salle de réception corporative"),
-  villa: u("1512917774080-9991f1c4c750", "Villa blanche avec piscine"),
-  cozy: u("1502672260266-1c1ef2d93688", "Intérieur chaleureux avec plantes", 4 / 5),
-  nycStreet: u("1449824913935-59a10b8d2000", "Grande avenue entre les gratte-ciels"),
-  nightSea: u("1534447677768-be436bb09401", "Ciel étoilé reflété sur l'eau"),
-  sprinter: u("1461896836934-ffe607ba8211", "Sprinteur dans les blocs de départ"),
-  runners: u("1552674605-db6ffd4facb5", "Coureurs en silhouette sous les projecteurs", 4 / 5),
-  neon: u("1508700115892-45ecd05ae2ad", "Enseigne néon sur un mur de brique"),
-  portraitMan: u("1500648767791-00dcc994a43e", "Portrait studio d'un homme", 4 / 5),
-  portraitWoman: u("1531746020798-e6953c6e8e04", "Portrait studio d'une femme", 4 / 5),
-  yellow: u("1515886657613-9f3515b0c78f", "Tenue jaune sur un terrain de basketball", 4 / 5),
-  houseDusk: u("1583337130417-3346a1be7dee", "Façade de maison au coucher du soleil"),
-  towers: u("1486406146926-c627a92ad1ab", "Gratte-ciels en contre-plongée", 4 / 5),
-  balls: u("1551958219-acbc608c6377", "Ballons de soccer sur le gazon"),
-  ballFoot: u("1579952363873-27f3bade9f55", "Pied posé sur un ballon", 4 / 5),
+  cityDusk: u("1519501025264-65ba15a82390", "Rue de centre-ville au crépuscule", 3 / 2, "Downtown street at dusk"),
+  soccerFoot: u("1574629810360-7efbbe195018", "Joueur de soccer frappant le ballon", 4 / 5, "Soccer player striking the ball"),
+  nightField: u("1431324155629-1a6deb1dec8d", "Terrain de soccer éclairé la nuit", 3 / 2, "Soccer field lit at night"),
+  whiteHouse: u("1600596542815-ffad4c1539a9", "Maison moderne blanche avec piscine", 3 / 2, "White modern house with a pool"),
+  houseEvening: u("1600585154340-be6161a56a0c", "Maison contemporaine illuminée en soirée", 3 / 2, "Contemporary house lit up in the evening"),
+  interior: u("1600607687939-ce8a6c25118c", "Salon lumineux à aire ouverte", 3 / 2, "Bright open-plan living room"),
+  conference: u("1540575467063-178a50c2df87", "Public d'une conférence", 3 / 2, "Conference audience"),
+  concertFire: u("1470229722913-7c0e2dbbafd3", "Scène de concert en contre-jour", 4 / 5, "Backlit concert stage"),
+  crowd: u("1501386761578-eac5c94b800a", "Foule en délire pendant un concert", 3 / 2, "Crowd cheering at a concert"),
+  photographer: u("1492691527719-9d1e07e534b4", "Photographe au sommet d'une montagne", 4 / 5, "Photographer on a mountain top"),
+  fieldMan: u("1503023345310-bd7c1de61c7d", "Homme de dos dans un champ doré", 4 / 5, "Man seen from behind in a golden field"),
+  smile: u("1492562080023-ab3db95bfbce", "Portrait lifestyle en extérieur", 4 / 5, "Outdoor lifestyle portrait"),
+  porsche: u("1503376780353-7e6692767b70", "Voiture sport de nuit sur l'autoroute", 3 / 2, "Sports car on the highway at night"),
+  garage: u("1492144534655-ae79c964c9d7", "Voiture blanche dans un stationnement sombre", 3 / 2, "White car in a dark parking garage"),
+  milkyWay: u("1519681393784-d120267933ba", "Montagnes sous la voie lactée", 16 / 9, "Mountains under the Milky Way"),
+  cyclists: u("1517649763962-0c623066013b", "Peloton de cyclistes", 3 / 2, "Cycling peloton"),
+  hoop: u("1546519638-68e109498ffc", "Ballon de basketball tombant dans le panier", 3 / 2, "Basketball dropping through the hoop"),
+  arena: u("1504450758481-7338eba7524a", "Aréna de basketball pleine", 3 / 2, "Packed basketball arena"),
+  purpleConcert: u("1506157786151-b8491531f063", "Concert sous lumières violettes", 3 / 2, "Concert under purple lights"),
+  banquet: u("1511578314322-379afb476865", "Salle de réception corporative", 3 / 2, "Corporate banquet hall"),
+  villa: u("1512917774080-9991f1c4c750", "Villa blanche avec piscine", 3 / 2, "White villa with a pool"),
+  cozy: u("1502672260266-1c1ef2d93688", "Intérieur chaleureux avec plantes", 4 / 5, "Cozy interior with plants"),
+  nycStreet: u("1449824913935-59a10b8d2000", "Grande avenue entre les gratte-ciels", 3 / 2, "Wide avenue between skyscrapers"),
+  nightSea: u("1534447677768-be436bb09401", "Ciel étoilé reflété sur l'eau", 3 / 2, "Starry sky reflected on the water"),
+  sprinter: u("1461896836934-ffe607ba8211", "Sprinteur dans les blocs de départ", 3 / 2, "Sprinter in the starting blocks"),
+  runners: u("1552674605-db6ffd4facb5", "Coureurs en silhouette sous les projecteurs", 4 / 5, "Runners silhouetted under floodlights"),
+  neon: u("1508700115892-45ecd05ae2ad", "Enseigne néon sur un mur de brique", 3 / 2, "Neon sign on a brick wall"),
+  portraitMan: u("1500648767791-00dcc994a43e", "Portrait studio d'un homme", 4 / 5, "Studio portrait of a man"),
+  portraitWoman: u("1531746020798-e6953c6e8e04", "Portrait studio d'une femme", 4 / 5, "Studio portrait of a woman"),
+  yellow: u("1515886657613-9f3515b0c78f", "Tenue jaune sur un terrain de basketball", 4 / 5, "Yellow outfit on a basketball court"),
+  houseDusk: u("1583337130417-3346a1be7dee", "Façade de maison au coucher du soleil", 3 / 2, "House facade at sunset"),
+  towers: u("1486406146926-c627a92ad1ab", "Gratte-ciels en contre-plongée", 4 / 5, "Skyscrapers from below"),
+  balls: u("1551958219-acbc608c6377", "Ballons de soccer sur le gazon", 3 / 2, "Soccer balls on the grass"),
+  ballFoot: u("1579952363873-27f3bade9f55", "Pied posé sur un ballon", 4 / 5, "Foot resting on a ball"),
 };
 
 export const seedCategories: Category[] = [
@@ -191,15 +192,15 @@ export const seedProjects: Project[] = [
 
 /** Tiko's own portraits for the 3D velvet stage (public/stage) */
 const STAGE: Img[] = [
-  { src: "/stage/portrait-pink.jpg", alt: "Portrait en studio, robe rose en velours", width: 1120, height: 1400 },
-  { src: "/stage/portrait-velvet.jpg", alt: "Portrait en studio, veston de velours violet", width: 525, height: 350 },
-  { src: "/stage/portrait-orange.jpg", alt: "Portrait en studio sur fond orange", width: 736, height: 1104 },
+  { src: "/stage/portrait-pink.jpg", alt: "Portrait en studio, robe rose en velours", altEn: "Studio portrait, pink velvet dress", width: 1120, height: 1400 },
+  { src: "/stage/portrait-velvet.jpg", alt: "Portrait en studio, veston de velours violet", altEn: "Studio portrait, purple velvet jacket", width: 525, height: 350 },
+  { src: "/stage/portrait-orange.jpg", alt: "Portrait en studio sur fond orange", altEn: "Studio portrait on an orange backdrop", width: 736, height: 1104 },
 ];
 
 export const seedSettings: Settings = {
   name: "TikoPix",
   heroEyebrow: "TikoPix",
-  heroTitle: "Visual stories, captured with",
+  heroTitle: "Des histoires visuelles, capturées avec",
   heroAccent: "intention",
   heroText:
     "Photographe et vidéaste basé à Montréal. Je crée des contenus visuels qui racontent des histoires authentiques, avec une attention particulière aux détails, à la lumière et à l'émotion.",
@@ -230,7 +231,7 @@ export const seedSettings: Settings = {
     { icon: "tools", label: "Logiciels", value: "Lightroom · DaVinci Resolve (Premiere Pro en apprentissage)" },
     { icon: "pin", label: "Base", value: "Montréal, Québec" },
   ],
-  ctaText: "Let's create something great.",
+  ctaText: "Créons quelque chose de grand.",
   ctaImage: IMG.milkyWay,
   email: "hello@tikopix.com",
   instagram: "https://instagram.com/tiko.pix",
@@ -268,6 +269,9 @@ export const seedEn: {
     portraits: { services: "Photography", summary: "Faces, and the truth in them." },
   },
   settings: {
+    heroTitle: "Visual stories, captured with",
+    heroAccent: "intention",
+    ctaText: "Let's create something great.",
     heroText:
       "Photographer and videographer based in Montréal. I create visual content that tells authentic stories, with close attention to detail, light and emotion.",
     specialtiesTitle: "Different worlds, one vision.",

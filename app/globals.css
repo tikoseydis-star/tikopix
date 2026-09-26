@@ -38,6 +38,8 @@ html {
 }
 
 body {
+  /* Safety net: decorative glows/parallax never create a sideways scroll (clip keeps sticky working) */
+  overflow-x: clip;
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-inter), system-ui, sans-serif;

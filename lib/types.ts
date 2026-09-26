@@ -1,6 +1,8 @@
 export type Img = {
   src: string;
   alt: string;
+  /** English description (falls back to alt) */
+  altEn?: string;
   width: number;
   height: number;
   /** base64 blur placeholder (Sanity lqip) */

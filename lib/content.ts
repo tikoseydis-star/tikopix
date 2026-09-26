@@ -35,12 +35,24 @@ function tr<T extends Record<string, unknown>>(obj: T, key: string, lang: Locale
   return en?.trim() ? en : (obj[key] as string | undefined) || undefined;
 }
 
+/** On /en, every image uses its English description when there is one. */
+function localizeAlts<T>(value: T, lang: Locale): T {
+  if (lang !== "en" || value === null || typeof value !== "object") return value;
+  if (Array.isArray(value)) return value.map((v) => localizeAlts(v, lang)) as T;
+  const obj = value as Record<string, unknown>;
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(obj)) out[k] = localizeAlts(v, lang);
+  if (typeof obj.src === "string" && typeof obj.altEn === "string" && obj.altEn) out.alt = obj.altEn;
+  return out as T;
+}
+
 /* ------------------------------------------------------------------ */
 /* Raw shapes + mappers                                                */
 
 type RawImg = {
   src?: string;
   alt?: string;
+  altEn?: string;
   w?: number;
   h?: number;
   lqip?: string;
@@ -49,13 +61,14 @@ type RawImg = {
 
 type RawVideo = { file?: string; url?: string } | null;
 
-const IMG = `{ "src": asset->url, alt, "w": asset->metadata.dimensions.width, "h": asset->metadata.dimensions.height, "lqip": asset->metadata.lqip, hotspot }`;
+const IMG = `{ "src": asset->url, alt, altEn, "w": asset->metadata.dimensions.width, "h": asset->metadata.dimensions.height, "lqip": asset->metadata.lqip, hotspot }`;
 
 function img(raw: RawImg | undefined, fallbackAlt: string, fallback?: Img): Img | undefined {
   if (!raw?.src) return fallback;
   return {
     src: `${raw.src}?auto=format&fit=max&w=2800&q=85`,
     alt: raw.alt || fallbackAlt,
+    altEn: raw.altEn || undefined,
     width: raw.w ?? 2400,
     height: raw.h ?? 1600,
     lqip: raw.lqip,
@@ -96,6 +109,10 @@ function seedSettingsFor(lang: Locale): Settings {
 }
 
 export async function getSettings(lang: Locale): Promise<Settings> {
+  return localizeAlts(await settingsFor(lang), lang);
+}
+
+async function settingsFor(lang: Locale): Promise<Settings> {
   const base = seedSettingsFor(lang);
   const raw = await query<RawSettings>(groq`*[_id == "settings"][0]{
     ..., "heroImage": heroImage${IMG}, "portrait": portrait${IMG}, "ctaImage": ctaImage${IMG}, "stageImages": stageImages[]${IMG},
@@ -137,6 +154,10 @@ function seedCategoriesFor(lang: Locale): Category[] {
 }
 
 export async function getCategories(lang: Locale): Promise<Category[]> {
+  return localizeAlts(await categoriesFor(lang), lang);
+}
+
+async function categoriesFor(lang: Locale): Promise<Category[]> {
   const raw = await query<RawCategory[]>(groq`*[_type == "category" && defined(slug.current)] | order(order asc, title asc){
     "slug": slug.current, title, titleEn, icon, description, descriptionEn, "cover": cover${IMG}
   }`);
@@ -214,6 +235,10 @@ function seedProjectsFor(lang: Locale): Project[] {
 }
 
 export async function getProjects(lang: Locale): Promise<Project[]> {
+  return localizeAlts(await projectsFor(lang), lang);
+}
+
+async function projectsFor(lang: Locale): Promise<Project[]> {
   const raw = await query<RawProject[]>(
     groq`*[_type == "project" && defined(slug.current)] | order(order asc, _createdAt desc)${PROJECT}`,
   );

@@ -12,7 +12,7 @@ export const settings = defineType({
   ],
   fields: [
     defineField({ name: "heroEyebrow", title: "Petit titre", type: "string", group: "hero", initialValue: "TikoPix" }),
-    ...withEn(defineField({ name: "heroTitle", title: "Grand titre", type: "string", group: "hero", initialValue: "Visual stories, captured with" })),
+    ...withEn(defineField({ name: "heroTitle", title: "Grand titre", type: "string", group: "hero", initialValue: "Des histoires visuelles, capturées avec" })),
     ...withEn(defineField({ name: "heroAccent", title: "Mot en violet (écriture)", type: "string", group: "hero", initialValue: "intention" })),
     ...withEn(defineField({ name: "heroText", title: "Texte d'introduction", type: "text", rows: 3, group: "hero" })),
     imageField("heroImage", "Image d'accueil", { description: "Affichée pendant le chargement de la vidéo.", group: "hero" }),
@@ -40,7 +40,7 @@ export const settings = defineType({
       type: "array",
       group: "hero",
       description: "2 à 5 portraits accrochés devant le rideau de velours. Glisse-les dans l'ordre voulu.",
-      of: [defineArrayMember({ type: "image", options: { hotspot: true }, fields: [defineField({ name: "alt", title: "Description courte", type: "string" })] })],
+      of: [defineArrayMember({ type: "image", options: { hotspot: true }, fields: [defineField({ name: "alt", title: "Description courte", type: "string" }), defineField({ name: "altEn", title: "Description courte (English)", type: "string" })] })],
       options: { layout: "grid" },
       validation: (r) => r.max(5),
     }),
@@ -73,7 +73,7 @@ export const settings = defineType({
       ],
     }),
 
-    ...withEn(defineField({ name: "ctaText", title: "Phrase finale", type: "string", group: "contact", initialValue: "Let's create something great." })),
+    ...withEn(defineField({ name: "ctaText", title: "Phrase finale", type: "string", group: "contact", initialValue: "Créons quelque chose de grand." })),
     imageField("ctaImage", "Image de fond finale", { group: "contact" }),
     defineField({ name: "email", title: "Courriel", type: "string", group: "contact", validation: (r) => r.email() }),
     defineField({ name: "instagram", title: "Instagram (lien)", type: "url", group: "contact" }),

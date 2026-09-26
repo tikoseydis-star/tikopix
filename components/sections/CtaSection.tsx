@@ -34,10 +34,10 @@ export function CtaSection({ s }: { s: Settings }) {
           viewport={{ once: true }}
         >
           {lines.map((l, i) => (
-            <span key={i} className="block overflow-hidden">
+            <span key={i} className="-my-[0.15em] block overflow-hidden px-[0.15em] py-[0.15em]">
               <motion.span
                 className="block"
-                variants={{ hidden: { y: "105%" }, show: { y: "0%" } }}
+                variants={{ hidden: { y: "140%" }, show: { y: "0%" } }}
                 transition={{ duration: 1, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
               >
                 {l}

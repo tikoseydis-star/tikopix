@@ -10,7 +10,7 @@ export const revalidate = 60;
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/work">): Promise<Metadata> {
   const lang = await pageLang(params);
-  return localizedMeta(lang, "/work", "Work", getDict(lang).meta.work);
+  return localizedMeta(lang, "/work", getDict(lang).pages.work, getDict(lang).meta.work);
 }
 
 export default async function WorkPage({ params }: PageProps<"/[lang]/work">) {
@@ -19,7 +19,7 @@ export default async function WorkPage({ params }: PageProps<"/[lang]/work">) {
   const [projects, categories, s] = await Promise.all([getProjects(lang), getCategories(lang), getSettings(lang)]);
   return (
     <>
-      <PageHeader eyebrow={t.work.eyebrow} title="Work" intro={t.work.intro} />
+      <PageHeader eyebrow={t.work.eyebrow} title={t.pages.work} intro={t.work.intro} />
       <Suspense>
         <WorkGrid projects={projects} categories={categories} />
       </Suspense>

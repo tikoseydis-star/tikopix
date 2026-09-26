@@ -8,7 +8,7 @@ import { useRef } from "react";
 import { useVideoModal } from "@/components/media/VideoModal";
 import type { Project } from "@/lib/types";
 
-/** Big cinematic rows; a hovered row previews its clip muted, click plays it with sound. */
+/** Big cinematic rows; a hovered row previews its clip muted, click plays it full screen. */
 function VideoRow({ p, index }: { p: Project; index: number }) {
   const { open } = useVideoModal();
   const vid = useRef<HTMLVideoElement>(null);

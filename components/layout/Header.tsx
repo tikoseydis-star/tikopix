@@ -66,7 +66,7 @@ export function Header({ name, instagram, youtube, email }: Props) {
                         aria-current={active ? "page" : undefined}
                         className={`group relative py-2 text-[13px] transition-colors ${active ? "text-fg" : "text-fg/75 hover:text-fg"}`}
                       >
-                        {item.label}
+                        {t.nav[item.key]}
                         <span
                           className={`absolute -bottom-0.5 left-0 h-px w-full origin-left bg-violet transition-transform duration-500 ${
                             active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
@@ -136,7 +136,7 @@ export function Header({ name, instagram, youtube, email }: Props) {
                         href={item.href}
                         className={`h-display block py-1 text-5xl ${isActive(pathname, item.href) ? "text-violet" : "text-fg"}`}
                       >
-                        {item.label}
+                        {t.nav[item.key]}
                       </Link>
                     </motion.div>
                   </li>

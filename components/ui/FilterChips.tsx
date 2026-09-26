@@ -14,7 +14,7 @@ export function FilterChips({
   label: string;
 }) {
   return (
-    <div role="group" aria-label={label} className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0">
+    <div role="group" aria-label={label} className="flex flex-wrap gap-2">
       {options.map((o) => {
         const active = o.value === value;
         return (

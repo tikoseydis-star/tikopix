@@ -16,6 +16,7 @@ export function imageField(name: string, title: string, options: { required?: bo
         type: "string",
         description: "Ce qu'on voit sur la photo (pour Google et l'accessibilité).",
       }),
+      defineField({ name: "altEn", title: "Description courte (English)", type: "string" }),
     ],
     validation: options.required ? (r) => r.required() : undefined,
   });

@@ -8,7 +8,7 @@ export const revalidate = 60;
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/photo">): Promise<Metadata> {
   const lang = await pageLang(params);
-  return localizedMeta(lang, "/photo", "Photo", getDict(lang).meta.photo);
+  return localizedMeta(lang, "/photo", getDict(lang).pages.photo, getDict(lang).meta.photo);
 }
 
 export default async function PhotoPage({ params }: PageProps<"/[lang]/photo">) {
@@ -17,7 +17,7 @@ export default async function PhotoPage({ params }: PageProps<"/[lang]/photo">) 
   const [items, categories] = await Promise.all([getPhotoStream(lang), getCategories(lang)]);
   return (
     <>
-      <PageHeader eyebrow={t.photo.eyebrow} title="Photo" intro={t.photo.intro} />
+      <PageHeader eyebrow={t.photo.eyebrow} title={t.pages.photo} intro={t.photo.intro} />
       <PhotoGallery items={items} categories={categories} />
     </>
   );

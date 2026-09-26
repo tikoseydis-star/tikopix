@@ -47,7 +47,7 @@ export function Hero({ s }: { s: Settings }) {
   const [line1, line2] = titleLines(s.heroTitle);
 
   return (
-    <section ref={ref} className="relative h-[100svh] min-h-[620px] overflow-hidden grain" aria-label={t.a11y.intro}>
+    <section ref={ref} className="relative min-h-[100svh] overflow-hidden grain" aria-label={t.a11y.intro}>
       <motion.div className="absolute inset-[-3%]" style={{ x: px, y: py }}>
       <motion.div className="absolute inset-0" style={{ scale: reduce ? 1.05 : bgScale, y: reduce ? 0 : bgY }}>
         <Image
@@ -83,12 +83,18 @@ export function Hero({ s }: { s: Settings }) {
       <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/10 to-bg/40" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,rgba(139,108,255,0.18),transparent_55%)]" />
 
-      <motion.div className="container-x relative z-10 flex h-full flex-col justify-end pb-16 sm:pb-20" style={{ y: contentY, opacity: contentOpacity }}>
+      {/* pt reserves the fixed menu height: the text can never slide under it, the hero grows instead */}
+      <motion.div className="container-x relative z-10 flex min-h-[100svh] flex-col justify-end pb-12 pt-28 sm:pb-16" style={{ y: contentY, opacity: contentOpacity }}>
         <motion.p className="eyebrow mb-5 !text-fg/80" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 1, ease: EASE }}>
           {s.heroEyebrow}
         </motion.p>
 
-        <h1 className="h-display max-w-5xl text-[clamp(2.6rem,7.4vw,6.6rem)] text-fg">
+        <h1
+          className={`h-display max-w-5xl text-fg ${
+            // Longer taglines (e.g. the French one) scale down so the hero never reaches the menu
+            s.heroTitle.length > 32 ? "text-[clamp(2.3rem,min(6.1vw,9vh),5.4rem)]" : "text-[clamp(2.6rem,min(7.4vw,11vh),6.6rem)]"
+          }`}
+        >
           <MaskLines as="p" lines={[line1]} animateOnMount delay={0.35} />
           <span className="flex flex-wrap items-baseline gap-x-[0.4em]">
             {line2 && <MaskLines as="p" lines={[line2]} animateOnMount delay={0.45} />}
@@ -120,7 +126,7 @@ export function Hero({ s }: { s: Settings }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2, duration: 1 }}
         >
-          {s.showreel ? <PlayButton video={s.showreel} label={t.hero.showreel} title="Showreel" /> : <span />}
+          {s.showreel ? <PlayButton video={s.showreel} label={t.hero.showreel} title={t.reel.label} /> : <span />}
           <button
             type="button"
             onClick={() => {

@@ -51,10 +51,10 @@ export function MaskLines({
   return (
     <MotionTag className={className} initial={reduce ? false : "hidden"} {...trigger}>
       {lines.map((line, i) => (
-        <span key={i} className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
+        <span key={i} className="-my-[0.14em] block overflow-hidden py-[0.14em]">
           <motion.span
             className={`block ${lineClassName ?? ""}`}
-            variants={{ hidden: { y: "110%" }, show: { y: "0%" } }}
+            variants={{ hidden: { y: "135%" }, show: { y: "0%" } }}
             transition={{ duration: 1.1, ease: EASE, delay: delay + i * 0.09 }}
           >
             {line}

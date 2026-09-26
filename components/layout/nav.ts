@@ -1,10 +1,11 @@
+/** Labels come from the dictionary: t.nav[key] */
 export const NAV = [
-  { href: "/", label: "Home" },
-  { href: "/work", label: "Work" },
-  { href: "/video", label: "Video" },
-  { href: "/photo", label: "Photo" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/", key: "home" },
+  { href: "/work", key: "work" },
+  { href: "/video", key: "video" },
+  { href: "/photo", key: "photo" },
+  { href: "/about", key: "about" },
+  { href: "/contact", key: "contact" },
 ] as const;
 
 export function isActive(pathname: string, href: string) {

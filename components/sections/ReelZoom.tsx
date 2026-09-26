@@ -28,11 +28,11 @@ export function ReelZoom({ reel, year }: { reel: Video; year: string }) {
   const media = reel.poster;
 
   return (
-    <section ref={ref} className="relative h-[260vh]" aria-label="Showreel">
+    <section ref={ref} className="relative h-[260vh]" aria-label={t.reel.label}>
       <div className="sticky top-0 flex h-[100svh] items-center justify-center overflow-hidden">
         <motion.button
           type="button"
-          onClick={() => open(reel, "Showreel")}
+          onClick={() => open(reel, t.reel.label)}
           data-cursor={t.cursor.play}
           aria-label={t.reel.play}
           className="absolute inset-0 block"
@@ -48,17 +48,16 @@ export function ReelZoom({ reel, year }: { reel: Video; year: string }) {
         </motion.button>
 
         <div className="pointer-events-none relative z-10 flex w-full items-center justify-center gap-[3vw] mix-blend-difference">
-          <motion.span className="h-display text-[clamp(3rem,14vw,13rem)] text-white" style={{ x: leftX, opacity: wordsOpacity }}>
-            Show
+          <motion.span className="h-display text-[clamp(3rem,11vw,10.5rem)] text-white" style={{ x: leftX, opacity: wordsOpacity }}>
+            {t.reel.left}
           </motion.span>
-          <motion.span className="h-display text-[clamp(3rem,14vw,13rem)] text-white" style={{ x: rightX, opacity: wordsOpacity }}>
-            Reel
+          <motion.span className="h-display text-[clamp(3rem,11vw,10.5rem)] text-white" style={{ x: rightX, opacity: wordsOpacity }}>
+            {t.reel.right}
           </motion.span>
         </div>
 
         <motion.div className="pointer-events-none absolute inset-x-0 bottom-12 z-10 text-center" style={{ opacity: ctaOpacity }}>
-          <p className="eyebrow !text-fg/90">Showreel {year}</p>
-          <p className="mt-3 font-script text-3xl text-violet-soft sm:text-4xl">{t.reel.hint}</p>
+          <p className="eyebrow !text-fg/90">{t.reel.label} {year}</p>
         </motion.div>
       </div>
     </section>

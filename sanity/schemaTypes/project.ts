@@ -62,7 +62,10 @@ export const project = defineType({
         defineArrayMember({
           type: "image",
           options: { hotspot: true },
-          fields: [defineField({ name: "alt", title: "Description courte", type: "string" })],
+          fields: [
+            defineField({ name: "alt", title: "Description courte", type: "string" }),
+            defineField({ name: "altEn", title: "Description courte (English)", type: "string" }),
+          ],
         }),
       ],
       options: { layout: "grid" },
