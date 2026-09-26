@@ -2,23 +2,24 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type Pt = { x: number; y: number; t: number };
-
-const LIFE = 520; // ms a brush point stays visible
-const MAX_W = 9; // px, stroke width at full speed
+type Mode = "idle" | "link" | "label";
 
 /**
- * Cursor = a precise dot glued to the pointer (no lag) + a violet brush stroke
- * painted on a canvas that tapers and fades behind it. Hovering a link or a
- * [data-cursor="Label"] element grows the dot into a labelled pill.
+ * TikoPix cursor: a glowing violet point inside the logo's viewfinder corners (⌜ ⌟),
+ * like a camera autofocus frame. Glued to the pointer (no easing on position, so it
+ * never lags); only the frame's size animates:
+ *   - links/buttons → the frame opens and "locks focus"
+ *   - [data-cursor="Label"] (photos, videos) → larger frame with the label
+ *   - mouse down → the frame snaps shut like a shutter
  * Fine pointers only; disabled for reduced motion.
  */
 export function Cursor() {
   const [enabled, setEnabled] = useState(false);
+  const [mode, setMode] = useState<Mode>("idle");
   const [label, setLabel] = useState<string | null>(null);
-  const [hover, setHover] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const dotRef = useRef<HTMLDivElement>(null);
+  const [pressed, setPressed] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fine = window.matchMedia("(pointer: fine)").matches;
@@ -32,127 +33,118 @@ export function Cursor() {
 
   useEffect(() => {
     if (!enabled) return;
-    const canvas = canvasRef.current!;
-    const ctx = canvas.getContext("2d")!;
-    const dot = dotRef.current!;
-    const pts: Pt[] = [];
-    let raf = 0;
-    let dirty = false;
+    const root = rootRef.current!;
+    let x = -100;
+    let y = -100;
+    let frame = 0;
+    let lastTarget: Element | null = null;
 
-    const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // Position is written once per frame, straight from the latest pointer event:
+    // no spring, no lag, and never more than one style write per frame.
+    const paint = () => {
+      frame = 0;
+      root.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     };
-    resize();
 
     const move = (e: PointerEvent) => {
       if (e.pointerType !== "mouse") return;
-      dot.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-      dot.style.opacity = "1";
-      // Coalesced events give every intermediate position → a smooth stroke even on fast moves
-      const events = e.getCoalescedEvents?.() ?? [e];
-      const now = performance.now();
-      for (const ev of events.length ? events : [e]) pts.push({ x: ev.clientX, y: ev.clientY, t: now });
-      dirty = true;
+      x = e.clientX;
+      y = e.clientY;
+      if (!frame) frame = requestAnimationFrame(paint);
+      setVisible(true);
 
-      const t = (e.target as HTMLElement | null)?.closest<HTMLElement>("[data-cursor], a, button, [role=button], input, textarea, select, label");
-      setLabel(t?.dataset.cursor ?? null);
-      setHover(!!t);
+      if (e.target === lastTarget) return;
+      lastTarget = e.target as Element;
+      const t = (e.target as HTMLElement | null)?.closest<HTMLElement>(
+        "[data-cursor], a, button, [role=button], input, textarea, select, label, summary",
+      );
+      const text = t?.dataset.cursor ?? null;
+      setLabel(text);
+      setMode(text ? "label" : t ? "link" : "idle");
     };
-    const leave = () => { dot.style.opacity = "0"; };
-
-    const draw = () => {
-      raf = requestAnimationFrame(draw);
-      const now = performance.now();
-      while (pts.length && now - pts[0].t > LIFE) pts.shift();
-      if (!pts.length && !dirty) return;
-      dirty = pts.length > 0;
-      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      if (pts.length < 2) return;
-
-      // Build one continuous ribbon (no overlapping segments → no "beads"):
-      // width follows speed and tapers toward the tail, filled with a head→tail fade.
-      const n = pts.length;
-      const L: [number, number][] = [];
-      const R: [number, number][] = [];
-      let v = 0;
-      for (let i = 0; i < n; i++) {
-        const p = pts[i];
-        const prev = pts[Math.max(i - 1, 0)];
-        const next = pts[Math.min(i + 1, n - 1)];
-        v = v * 0.7 + Math.min(Math.hypot(p.x - prev.x, p.y - prev.y) / 14, 1) * 0.3;
-        const life = 1 - (now - p.t) / LIFE;
-        const taper = i / (n - 1);
-        const w = (1.2 + v * MAX_W) * life * (0.25 + 0.75 * taper);
-        let dx = next.x - prev.x;
-        let dy = next.y - prev.y;
-        const len = Math.hypot(dx, dy) || 1;
-        dx /= len;
-        dy /= len;
-        L.push([p.x - dy * w, p.y + dx * w]);
-        R.push([p.x + dy * w, p.y - dx * w]);
-      }
-      const trace = (side: [number, number][], reverse: boolean) => {
-        const list = reverse ? [...side].reverse() : side;
-        for (let i = 1; i < list.length - 1; i++) {
-          const mx = (list[i][0] + list[i + 1][0]) / 2;
-          const my = (list[i][1] + list[i + 1][1]) / 2;
-          ctx.quadraticCurveTo(list[i][0], list[i][1], mx, my);
-        }
-        ctx.lineTo(list[list.length - 1][0], list[list.length - 1][1]);
-      };
-      const head = pts[n - 1];
-      const tail = pts[0];
-      const grad = ctx.createLinearGradient(tail.x, tail.y, head.x, head.y);
-      grad.addColorStop(0, "rgba(139, 108, 255, 0)");
-      grad.addColorStop(0.6, "rgba(139, 108, 255, 0.55)");
-      grad.addColorStop(1, "rgba(200, 180, 255, 0.95)");
-
-      ctx.beginPath();
-      ctx.moveTo(L[0][0], L[0][1]);
-      trace(L, false);
-      ctx.lineTo(R[n - 1][0], R[n - 1][1]);
-      trace(R, true);
-      ctx.closePath();
-      ctx.shadowColor = "rgba(139, 108, 255, 0.8)";
-      ctx.shadowBlur = 16;
-      ctx.fillStyle = grad;
-      ctx.fill();
-      ctx.shadowBlur = 0;
-    };
-    raf = requestAnimationFrame(draw);
+    const down = () => setPressed(true);
+    const up = () => setPressed(false);
+    const leave = () => setVisible(false);
 
     window.addEventListener("pointermove", move, { passive: true });
-    document.addEventListener("pointerleave", leave);
-    window.addEventListener("resize", resize);
+    window.addEventListener("pointerdown", down, { passive: true });
+    window.addEventListener("pointerup", up, { passive: true });
+    document.documentElement.addEventListener("pointerleave", leave);
     return () => {
-      cancelAnimationFrame(raf);
+      cancelAnimationFrame(frame);
       window.removeEventListener("pointermove", move);
-      document.removeEventListener("pointerleave", leave);
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("pointerdown", down);
+      window.removeEventListener("pointerup", up);
+      document.documentElement.removeEventListener("pointerleave", leave);
     };
   }, [enabled]);
 
   if (!enabled) return null;
 
+  // Frame size (px) per state; pressing snaps it shut like a shutter
+  const size = pressed ? 14 : mode === "label" ? 84 : mode === "link" ? 40 : 24;
+  const corner = mode === "label" ? 14 : 8;
+  const color = mode === "idle" ? "rgba(244,244,246,0.9)" : "#b9a6ff";
+
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-[100]">
-      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
-      <div ref={dotRef} className="fixed left-0 top-0 opacity-0 will-change-transform">
-        <div
-          className={`flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full transition-[width,height,background-color,box-shadow] duration-300 ease-[var(--ease-out)] ${
-            label
-              ? "h-20 w-20 bg-violet shadow-[0_0_40px_rgba(139,108,255,0.55)]"
-              : hover
-                ? "h-10 w-10 bg-violet/25 shadow-[0_0_0_1px_rgba(185,166,255,0.8)]"
-                : "h-2.5 w-2.5 bg-white shadow-[0_0_12px_rgba(185,166,255,0.9)]"
-          }`}
-        >
-          {label && <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white">{label}</span>}
-        </div>
+    <div
+      ref={rootRef}
+      aria-hidden
+      className="pointer-events-none fixed left-0 top-0 z-[100] will-change-transform"
+      style={{ transform: "translate3d(-100px,-100px,0)", opacity: visible ? 1 : 0, transition: "opacity 200ms" }}
+    >
+      {/* Autofocus frame: only its size animates, the position never lags */}
+      <div
+        className="absolute left-0 top-0"
+        style={{
+          width: size,
+          height: size,
+          transform: "translate(-50%, -50%)",
+          transition: "width 260ms cubic-bezier(0.22,1,0.36,1), height 260ms cubic-bezier(0.22,1,0.36,1)",
+        }}
+      >
+        {(["tl", "tr", "bl", "br"] as const).map((c) => (
+          <span
+            key={c}
+            className="absolute"
+            style={{
+              width: corner,
+              height: corner,
+              top: c[0] === "t" ? 0 : undefined,
+              bottom: c[0] === "b" ? 0 : undefined,
+              left: c[1] === "l" ? 0 : undefined,
+              right: c[1] === "r" ? 0 : undefined,
+              borderColor: color,
+              borderStyle: "solid",
+              borderWidth: `${c[0] === "t" ? 1.5 : 0}px ${c[1] === "r" ? 1.5 : 0}px ${c[0] === "b" ? 1.5 : 0}px ${c[1] === "l" ? 1.5 : 0}px`,
+              filter: mode === "idle" ? "none" : "drop-shadow(0 0 4px rgba(139,108,255,0.9))",
+              transition: "width 260ms, height 260ms, border-color 200ms, filter 200ms",
+            }}
+          />
+        ))}
+        {label && (
+          <span className="absolute inset-0 flex items-center justify-center text-[10px] font-semibold uppercase tracking-[0.24em] text-white [text-shadow:0_0_10px_rgba(139,108,255,0.9)]">
+            {label}
+          </span>
+        )}
       </div>
+
+      {/* The light: a small glowing point with a soft violet bloom */}
+      <div
+        className="absolute left-0 top-0 rounded-full"
+        style={{
+          // Over a link the light shrinks so it never hides the text being pointed at
+          width: mode === "label" ? 0 : mode === "link" ? 3 : 6,
+          height: mode === "label" ? 0 : mode === "link" ? 3 : 6,
+          transform: "translate(-50%, -50%)",
+          background: "#fff",
+          boxShadow:
+            mode === "link"
+              ? "0 0 4px 1px rgba(185,166,255,0.8)"
+              : "0 0 6px 2px rgba(185,166,255,0.95), 0 0 18px 6px rgba(139,108,255,0.55), 0 0 42px 14px rgba(139,108,255,0.22)",
+          transition: "width 200ms, height 200ms, box-shadow 200ms",
+        }}
+      />
     </div>
   );
 }
