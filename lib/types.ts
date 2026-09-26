@@ -44,6 +44,8 @@ export type Project = {
   location?: string;
   year?: string;
   featured: boolean;
+  /** Last edit in the Studio (ISO date), used by the sitemap */
+  updatedAt?: string;
 };
 
 export type Skill = {

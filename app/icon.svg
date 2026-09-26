@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- TikoPix mark: the logo's viewfinder corners around a point of violet light -->
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#b9a6ff" stop-opacity="0.9"/>
+      <stop offset="0.45" stop-color="#8b6cff" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#8b6cff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0a0a0d"/>
+  <path d="M14 27 V14 H27" fill="none" stroke="#f4f4f6" stroke-width="5" stroke-linecap="square"/>
+  <path d="M50 37 V50 H37" fill="none" stroke="#f4f4f6" stroke-width="5" stroke-linecap="square"/>
+  <circle cx="32" cy="32" r="14" fill="url(#glow)"/>
+  <circle cx="32" cy="32" r="5" fill="#ffffff"/>
+</svg>

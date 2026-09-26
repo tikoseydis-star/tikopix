@@ -193,10 +193,11 @@ type RawProject = {
   location?: string;
   year?: string;
   featured?: boolean;
+  updatedAt?: string;
 };
 
 const PROJECT = `{
-  "slug": slug.current, title, titleEn, eyebrow, eyebrowEn, services, servicesEn, summary, summaryEn,
+  "slug": slug.current, "updatedAt": _updatedAt, title, titleEn, eyebrow, eyebrowEn, services, servicesEn, summary, summaryEn,
   client, location, year, featured,
   "category": category->{ "slug": slug.current, title, titleEn },
   "cover": cover${IMG},
@@ -223,6 +224,7 @@ function mapProject(p: RawProject, lang: Locale): Project {
     location: p.location,
     year: p.year,
     featured: !!p.featured,
+    updatedAt: p.updatedAt,
   };
 }
 

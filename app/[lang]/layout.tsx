@@ -8,6 +8,7 @@ import { Intro } from "@/components/motion/Intro";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { getSettings } from "@/lib/content";
 import { getDict, isLocale, locales } from "@/lib/i18n";
+import { jsonLdString, siteJsonLd } from "@/lib/structured-data";
 import { fontVariables } from "../fonts";
 import "../globals.css";
 
@@ -26,8 +27,13 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
     metadataBase: new URL(siteUrl),
     title: { default: t.meta.title, template: "%s · TikoPix" },
     description: t.meta.description,
-    openGraph: { type: "website", siteName: "TikoPix", locale: lang === "fr" ? "fr_CA" : "en_CA" },
-    twitter: { card: "summary_large_image" },
+    openGraph: {
+      type: "website",
+      siteName: "TikoPix",
+      locale: lang === "fr" ? "fr_CA" : "en_CA",
+      images: [{ url: "/og-tikopix.jpg", width: 1200, height: 630, alt: t.meta.title }],
+    },
+    twitter: { card: "summary_large_image", images: ["/og-tikopix.jpg"] },
     alternates: { canonical: `/${lang}`, languages: { "fr-CA": "/fr", "en-CA": "/en" } },
   };
 }
@@ -62,6 +68,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
             <Footer settings={settings} lang={lang} />
             <Cursor />
           </VideoModalProvider>
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(siteJsonLd(lang, settings, t.meta.description)) }} />
         </SmoothScroll>
       </body>
     </html>
