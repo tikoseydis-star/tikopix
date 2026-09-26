@@ -90,12 +90,13 @@ export function Hero({ s }: { s: Settings }) {
 
         <h1 className="h-display max-w-5xl text-[clamp(2.6rem,7.4vw,6.6rem)] text-fg">
           <MaskLines as="p" lines={[line1]} animateOnMount delay={0.35} />
-          <span className="flex flex-wrap items-baseline gap-x-[0.28em]">
+          <span className="flex flex-wrap items-baseline gap-x-[0.4em]">
             {line2 && <MaskLines as="p" lines={[line2]} animateOnMount delay={0.45} />}
             <motion.span
-              className="script whitespace-nowrap pr-2 normal-case text-[1.02em]"
-              initial={reduce ? false : { clipPath: "inset(0 100% 0 0)" }}
-              animate={{ clipPath: "inset(0 -5% 0 0)" }}
+              // Brush glyphs overflow their box (skew + tall strokes): pad them and clip with margin so nothing is cut
+              className="script whitespace-nowrap px-[0.14em] py-[0.1em] normal-case leading-[1.1] tracking-[0.03em] text-[1.02em]"
+              initial={reduce ? false : { clipPath: "inset(-30% 100% -30% -15%)" }}
+              animate={{ clipPath: "inset(-30% -15% -30% -15%)" }}
               transition={{ delay: 1.05, duration: 1.2, ease: [0.65, 0, 0.35, 1] }}
             >
               {s.heroAccent.toUpperCase()}
