@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = { title: "404 · TikoPix" };
 
-/** Unmatched URLs (the proxy already routes everything else into /fr or /en). */
+/** Unmatched URLs (language redirects in next.config.ts route everything else into /fr or /en). */
 export default function GlobalNotFound() {
   return (
     <html lang="fr-CA" className={fontVariables}>

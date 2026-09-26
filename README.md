@@ -16,7 +16,7 @@ Sans configuration, le site tourne sur du **contenu de démo** (`lib/seed.ts`, p
 
 ## Bilingue FR / EN
 
-- URLs : `/fr/...` et `/en/...`. La racine `/` redirige selon le choix mémorisé (cookie `tikopix-lang`), sinon la langue du navigateur, sinon le français (`proxy.ts`).
+- URLs : `/fr/...` et `/en/...`. La racine `/` redirige selon le choix mémorisé (cookie `tikopix-lang`), sinon la langue du navigateur, sinon le français (règles de redirection dans `next.config.ts`).
 - Sélecteur **FR / EN** dans le header : reste sur la même page.
 - Textes d'interface : `lib/i18n.ts` (dictionnaires FR + EN).
 - Contenu : chaque champ texte du Studio a un jumeau **(English)** optionnel. S'il est vide, la version anglaise affiche le texte français.

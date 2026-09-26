@@ -42,3 +42,6 @@ next-env.d.ts
 
 # Template without secrets: keep it in the repo
 !.env.example
+
+# Netlify local build output
+.netlify

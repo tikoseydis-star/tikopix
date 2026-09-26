@@ -27,7 +27,7 @@ function Switch({ className }: { className: string }) {
             hrefLang={l}
             lang={l}
             aria-current={l === lang ? "true" : undefined}
-            // Remember the choice so the proxy honours it on the next visit
+            // Remember the choice so the language redirects in next.config.ts honour it next visit
             onClick={() => { document.cookie = `tikopix-lang=${l};path=/;max-age=31536000;samesite=lax`; }}
             className={`px-1 py-1 uppercase transition-colors ${l === lang ? "text-fg" : "text-fg/45 hover:text-violet-soft"}`}
           >

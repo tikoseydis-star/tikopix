@@ -1,0 +1,7 @@
+# Netlify: Next.js is auto-detected (OpenNext adapter). Kept explicit for clarity.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
