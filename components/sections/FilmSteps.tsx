@@ -203,8 +203,6 @@ export function FilmSteps({ steps }: { steps: Step[] }) {
       <div className="relative mx-auto mt-16 hidden max-w-6xl flex-col gap-12 lg:flex">
         <Strip dir="h" steps={a} start={1} tilt={-0.5} delay={0} />
         <Strip dir="h" steps={b} start={half + 1} tilt={0.4} delay={0.15} />
-        <BrushStroke dir="h" className="-left-10 top-[10px] w-[58%]" width={9} seed={3} delay={0.5} opacity={0.85} />
-        <BrushStroke dir="h" className="left-[30%] top-[calc(50%-24px)] w-[48%]" width={30} seed={11} delay={0.8} />
         <BrushStroke dir="h" className="-right-12 bottom-[8px] w-[46%]" width={7} seed={19} delay={1.05} opacity={0.8} />
       </div>
 
@@ -212,8 +210,6 @@ export function FilmSteps({ steps }: { steps: Step[] }) {
       <div className="relative mx-auto mt-14 grid max-w-5xl gap-10 md:grid-cols-2 md:gap-8 lg:hidden">
         <Strip dir="v" steps={a} start={1} tilt={-0.6} delay={0} />
         <Strip dir="v" steps={b} start={half + 1} tilt={0.5} delay={0.15} />
-        <BrushStroke className="-top-10 left-[14px] h-[62%]" width={9} seed={3} delay={0.5} opacity={0.85} />
-        <BrushStroke className="left-[calc(50%-34px)] top-[26%] hidden h-[56%] md:block" width={30} seed={11} delay={0.8} />
         <BrushStroke className="-bottom-12 right-[12px] h-[48%]" width={7} seed={19} delay={1.05} opacity={0.8} />
       </div>
     </>
