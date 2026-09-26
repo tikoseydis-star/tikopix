@@ -234,8 +234,7 @@ export const seedSettings: Settings = {
   ctaText: "Créons quelque chose de grand.",
   ctaImage: IMG.milkyWay,
   email: "hello@tikopix.com",
-  instagram: "https://instagram.com/tiko.pix",
-  youtube: "https://youtube.com/@tikopix",
+  instagram: "https://www.instagram.com/tiko.pix/",
   handle: "@tiko.pix",
   city: "Montréal, Québec",
 };
